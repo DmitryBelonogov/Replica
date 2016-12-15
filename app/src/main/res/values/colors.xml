@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="weekDays">#ffdda35d</color>
+    <color name="colorCalendarText">#f7e3c9</color>
+    <color name="colorCalendarToday">#ff44ffff</color>
+    <color name="colorEvent">#ff125185</color>
+
+    <color name="colorBgStart">#ff205777</color>
+    <color name="colorBgEnd">#ff3888cc</color>
+
+
+    <color name="colorEditorDate">#fff7e3c9</color>
+    <color name="colorEditorYear">#aaf7e3c9</color>
+    <color name="colorEditorText">#ffccfffc</color>
+    <color name="colorEditorHint">#aaccfffc</color>
+
+    <color name="colorPrimary">#ff205777</color>
+    <color name="colorPrimaryDark">#ff205777</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="transparent">#00ffffff</color>
+</resources>
