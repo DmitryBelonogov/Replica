@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
@@ -40,6 +41,17 @@ public class MainActivity extends Activity {
 
         calendar = (FlexibleCalendarView) findViewById(R.id.calendar);
         addButton = (ImageButton) findViewById(R.id.addButton);
+
+        Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+
+                startActivity(intent);
+            }
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
