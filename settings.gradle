@@ -1,1 +1,1 @@
-include ':app', ':kean'
+include ':app'
