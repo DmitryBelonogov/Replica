@@ -76,4 +76,8 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="done">Done</string>
+    <string name="edit_fast_note.hint">Record your thoughts</string>
+    <string name="title_activity_trash">TrashActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
 </resources>
