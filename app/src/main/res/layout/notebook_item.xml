@@ -15,8 +15,16 @@
             android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:id="@+id/nameView"
+            android:textSize="16sp"
+            android:textColor="@color/primary_text_lighter"
+            tools:ignore="MissingPrefix"/>
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:id="@+id/countView"
             android:textSize="16sp"
             android:textColor="@color/primary_text_lighter"
             tools:ignore="MissingPrefix"/>

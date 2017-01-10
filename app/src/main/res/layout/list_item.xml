@@ -44,4 +44,13 @@
         android:textColor="@color/secondary_text"
         tools:ignore="MissingPrefix" />
 
+    <TextView
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notebookView"
+        android:textSize="14sp"
+        android:textColor="@color/primary_text"
+        tools:ignore="MissingPrefix"/>
+
 </LinearLayout>

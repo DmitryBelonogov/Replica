@@ -75,7 +75,6 @@ public class NotebooksActivity extends BaseActivity {
     private void loadNotebooks() {
         listView = (ListView) findViewById(R.id.listView);
         notebooksList = db.getAllNotebooks();
-        Log.i("fff", notebooksList.size() + "");
         adapter = new NotebookAdapter(this, notebooksList);
         listView.setAdapter(adapter);
     }

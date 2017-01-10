@@ -7,8 +7,8 @@ import java.util.Date;
 
 public class NotebookModel implements Parcelable {
 
-    private float id;
-    private float parent;
+    private long id;
+    private long parent;
     private String name;
     private String description;
 
@@ -20,8 +20,8 @@ public class NotebookModel implements Parcelable {
     }
 
     private NotebookModel(Parcel in) {
-        id = in.readFloat();
-        parent = in.readFloat();
+        id = in.readLong();
+        parent = in.readLong();
         name = in.readString();
         description = in.readString();
     }
@@ -38,19 +38,19 @@ public class NotebookModel implements Parcelable {
         }
     };
 
-    public float getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(float id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public float getParent() {
+    public long getParent() {
         return parent;
     }
 
-    public void setParent(float parent) {
+    public void setParent(long parent) {
         this.parent = parent;
     }
 

@@ -1,8 +1,8 @@
 package com.nougust3.diary;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.widget.Toast;
 import com.nougust3.diary.models.MercuryApi;
 import com.nougust3.diary.utils.Constants;
 import retrofit2.Retrofit;
@@ -11,8 +11,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class Keep extends Application {
 
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
+
     private static MercuryApi mercuryApi;
-    private Context context;
 
     @Override
     public void onCreate() {
@@ -36,6 +38,10 @@ public class Keep extends Application {
 
     public static MercuryApi getApi() {
         return mercuryApi;
+    }
+
+    public static Context getAppContext() {
+        return Keep.context;
     }
 
 }

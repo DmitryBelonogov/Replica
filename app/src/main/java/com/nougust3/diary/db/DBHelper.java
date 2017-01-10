@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteReadOnlyDatabaseException;
 import android.util.Log;
 
+import com.nougust3.diary.Keep;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.NotebookModel;
 import com.nougust3.diary.utils.Constants;
@@ -45,6 +46,18 @@ public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase db = null;
 
     private final Context context;
+    private static DBHelper instance = null;
+
+    public static synchronized DBHelper getInstance() {
+        return getInstance(Keep.getAppContext());
+    }
+
+    public static synchronized DBHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DBHelper(context);
+        }
+        return instance;
+    }
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -183,7 +196,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     note.setCategory(cursor.getString(4));
                     note.setIsTask(Integer.parseInt(cursor.getString(5)));
                     note.setArchive(Integer.parseInt(cursor.getString(6)));
-                    note.setNotebook(Integer.parseInt(cursor.getString(7)));
+                    note.setNotebook(Long.parseLong(cursor.getString(7)));
 
                     noteList.add(note);
                 } while (cursor.moveToNext());
@@ -239,8 +252,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return getNotes(" where task = 0 and archive = 0 ");
     }
 
+    public List<Note> getFromNotebook(long id) {
+        return getNotes(" where notebook = " + id);
+    }
+
     public List<NotebookModel> getAllNotebooks() {
         return getNotebooks("");
+    }
+
+    public long getNotebookId(String name) {
+        return getNotebooks(" where name = " + name).get(0).getId();
     }
 
     public List<Note> getRemovedNotes() {

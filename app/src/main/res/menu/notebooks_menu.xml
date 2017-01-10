@@ -3,5 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="New notebook"
-        android:id="@+id/newNotebookItem" />
+        android:id="@+id/newNotebookItem"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -8,5 +8,7 @@ public class NoteViewHolder {
     public TextView contentView;
     public TextView titleView;
 
+    public TextView notebookView;
+
     public CheckBox checkBox;
 }

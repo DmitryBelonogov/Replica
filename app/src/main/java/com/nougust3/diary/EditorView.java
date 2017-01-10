@@ -5,13 +5,20 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+
 import com.fiberlink.maas360.android.richtexteditor.RichEditText;
 import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
+import com.nougust3.diary.models.NotebookModel;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditorView extends BaseActivity {
 
@@ -20,10 +27,13 @@ public class EditorView extends BaseActivity {
 
     private EditText titleView;
     private RichEditText contentView;
+    private Spinner spinner;
 
     private MenuItem doneItem;
     private MenuItem editItem;
     private MenuItem removeItem;
+
+    private List<String> notebooks;
 
     private Note note;
 
@@ -87,6 +97,21 @@ public class EditorView extends BaseActivity {
         setSupportActionBar(toolbar);
 
         titleView = (EditText) findViewById(R.id.titleView);
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+        notebooks = new ArrayList<>();
+        notebooks.add("Inbox");
+        List<NotebookModel> list = DBHelper.getInstance().getAllNotebooks();
+
+        for (NotebookModel notebook : list) {
+            notebooks.add(notebook.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, notebooks);
+        spinner.setAdapter(adapter);
+
+
     }
 
     private void initContent() {
@@ -109,6 +134,18 @@ public class EditorView extends BaseActivity {
             titleView.setText(note.getTitle());
         }
 
+        if(note.getNotebook() == 0) {
+            spinner.setSelection(0);
+        }
+        else {
+            String name = DBHelper.getInstance().getNotebook(note.getNotebook()).getName();
+            for (int i = 0; i < notebooks.size(); i ++) {
+                if(notebooks.get(i).equals(name)) {
+                    spinner.setSelection(i);
+                }
+            }
+        }
+
         contentView.setHtml(note.getContent());
     }
 
@@ -118,6 +155,17 @@ public class EditorView extends BaseActivity {
         note.setModification(DateUtils.getTimeInMillis());
         note.setTitle(titleView.getText().toString());
         note.setContent(contentView.getHtml());
+        if(spinner.getSelectedItem().toString().equals("Inbox")) {
+            note.setNotebook(0);
+        }
+        else {
+            List<NotebookModel> list = DBHelper.getInstance().getAllNotebooks();
+            for(NotebookModel nb : list) {
+                if(nb.getName().equals(spinner.getSelectedItem().toString())){
+                    note.setNotebook(nb.getId());
+                }
+            }
+        }
 
         db.updateNote(note);
 

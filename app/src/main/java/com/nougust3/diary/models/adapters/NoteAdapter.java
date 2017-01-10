@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import com.nougust3.diary.R;
+import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.holders.NoteViewHolder;
 import com.nougust3.diary.utils.DateUtils;
@@ -75,6 +76,7 @@ public class NoteAdapter extends BaseAdapter {
             holder.dateView = (TextView) view.findViewById(R.id.dateView);
             holder.contentView = (TextView) view.findViewById(R.id.contentView);
             holder.titleView = (TextView) view.findViewById(R.id.titleView);
+            holder.notebookView = (TextView) view.findViewById(R.id.notebookView);
             view.setTag(holder);
         }
         else {
@@ -91,6 +93,13 @@ public class NoteAdapter extends BaseAdapter {
                     && !note.getTitle().equals("title"))
                     ? note.getTitle() : "Без названия"
             );
+            if(note.getNotebook() == 0) {
+                holder.notebookView.setText("Inbox");
+            }
+            else {
+                holder.notebookView.setText(DBHelper.getInstance().
+                        getNotebook(note.getNotebook()).getName());
+            }
         }
 
         return view;
