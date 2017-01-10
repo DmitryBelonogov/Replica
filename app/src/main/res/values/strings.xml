@@ -80,4 +80,5 @@
     <string name="edit_fast_note.hint">Record your thoughts</string>
     <string name="title_activity_trash">TrashActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="notebook.name.default">New notebook</string>
 </resources>

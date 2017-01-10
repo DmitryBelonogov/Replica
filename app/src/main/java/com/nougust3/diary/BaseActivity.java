@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class BaseActivity extends AppCompatActivity {
 
     public Context getContext() {
@@ -14,4 +16,10 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
                 .show();
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

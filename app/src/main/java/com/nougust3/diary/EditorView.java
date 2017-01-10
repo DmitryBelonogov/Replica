@@ -1,6 +1,5 @@
 package com.nougust3.diary;
 
-import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,8 +12,6 @@ import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditorView extends BaseActivity {
 
@@ -38,12 +35,6 @@ public class EditorView extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/MyriadPro-Light.otf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
-
         setContentView(R.layout.editor_view);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -51,14 +42,8 @@ public class EditorView extends BaseActivity {
         initToolbar();
         initContent();
 
-
-loadNote();
+        loadNote();
         setMode(MODE.VIEW_MODE);
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -164,7 +149,6 @@ loadNote();
             }
 
             titleView.setEnabled(false);
-            //contentView.setEnabled(false);
         }
 
         if(mode == MODE.EDIT_MODE) {
@@ -176,7 +160,6 @@ loadNote();
             }
 
             titleView.setEnabled(true);
-            //contentView.setEnabled(true);
         }
 
         invalidateOptionsMenu();

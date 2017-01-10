@@ -7,10 +7,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteReadOnlyDatabaseException;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.nougust3.diary.models.Note;
+import com.nougust3.diary.models.NotebookModel;
 import com.nougust3.diary.utils.Constants;
 
 import java.io.IOException;
@@ -24,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DB_DIR = "db";
 
     private static final String TABLE_NOTES = "notes";
+    private static final String TABLE_NOTEBOOKS = "notebooks";
 
     private static final String KEY_CREATION = "creation";
     private static final String KEY_MODIFICATION = "modification";
@@ -32,6 +33,12 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_TASK = "task";
     private static final String KEY_ARCHIVE = "archive";
+    private static final String KEY_NOTEBOOK = "notebook";
+
+    private static final String KEY_NOTEBOOK_ID = "id";
+    private static final String KEY_NOTEBOOK_PARENT = "parent";
+    private static final String KEY_NOTEBOOK_NAME = "name";
+    private static final String KEY_NOTEBOOK_DESCRIPTION = "description";
 
     private static final String CREATE_QUERY = "create.sql";
 
@@ -96,6 +103,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_CATEGORY, note.getCategory());
         values.put(KEY_TASK, note.isTask() ? 1 : 0);
         values.put(KEY_ARCHIVE, note.isArchive() ? 1 : 0);
+        values.put(KEY_NOTEBOOK, note.getNotebook());
 
         db.insertWithOnConflict(TABLE_NOTES, KEY_CREATION, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.setTransactionSuccessful();
@@ -104,12 +112,42 @@ public class DBHelper extends SQLiteOpenHelper {
         return note;
     }
 
+    public NotebookModel updateNotebook(NotebookModel notebook) {
+        SQLiteDatabase db = getDatabase(true);
+        ContentValues values = new ContentValues();
+
+        db.beginTransaction();
+
+        values.put(KEY_NOTEBOOK_ID, notebook.getId());
+        values.put(KEY_NOTEBOOK_PARENT, notebook.getParent());
+        values.put(KEY_NOTEBOOK_NAME, notebook.getName());
+        values.put(KEY_NOTEBOOK_DESCRIPTION, notebook.getDescription());
+
+        db.insertWithOnConflict(TABLE_NOTEBOOKS, KEY_NOTEBOOK_ID, values,
+                SQLiteDatabase.CONFLICT_REPLACE);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
+        return notebook;
+    }
+
     public Note getNote(long id) {
         String where = " WHERE " + KEY_CREATION + " = " + id;
         List<Note> notes = getNotes(where);
 
         if(notes.size() > 0) {
             return notes.get(0);
+        }
+
+        return null;
+    }
+
+    public NotebookModel getNotebook(long id) {
+        String where = " WHERE " + KEY_NOTEBOOK_ID + " = " + id;
+        List<NotebookModel> notebooks = getNotebooks(where);
+
+        if(notebooks.size() > 0) {
+            return notebooks.get(0);
         }
 
         return null;
@@ -124,7 +162,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_CONTENT + ","
                 + KEY_CATEGORY + ","
                 + KEY_TASK + ","
-                + KEY_ARCHIVE + " FROM "
+                + KEY_ARCHIVE + ","
+                + KEY_NOTEBOOK + " FROM "
                 + TABLE_NOTES
                 + where + " ORDER BY "
                 + KEY_MODIFICATION + " DESC ";
@@ -144,6 +183,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     note.setCategory(cursor.getString(4));
                     note.setIsTask(Integer.parseInt(cursor.getString(5)));
                     note.setArchive(Integer.parseInt(cursor.getString(6)));
+                    note.setNotebook(Integer.parseInt(cursor.getString(7)));
 
                     noteList.add(note);
                 } while (cursor.moveToNext());
@@ -158,12 +198,49 @@ public class DBHelper extends SQLiteOpenHelper {
         return noteList;
     }
 
-    public List<Note> getAllNotes() {
-        List<Note> noteList = getNotes(" where task = 1 and archive = 0 ");
-        List<Note> noteList2 = getNotes(" where task = 0 and archive = 0 ");
-        noteList.addAll(noteList2);
+    private List<NotebookModel> getNotebooks(String where) {
+        List<NotebookModel> notebooksList = new ArrayList<>();
 
-        return noteList;
+        String query = "SELECT " + KEY_NOTEBOOK_ID + ","
+                + KEY_NOTEBOOK_PARENT + ","
+                + KEY_NOTEBOOK_NAME + ","
+                + KEY_NOTEBOOK_DESCRIPTION + " FROM "
+                + TABLE_NOTEBOOKS
+                + where + " ORDER BY "
+                + KEY_NOTEBOOK_ID + " DESC ";
+
+        Cursor cursor = null;
+
+        try {
+            cursor = getDatabase(false).rawQuery(query, null);
+
+            if(cursor.moveToFirst()) {
+                do {
+                    NotebookModel notebook = new NotebookModel();
+                    notebook.setId(Long.parseLong(cursor.getString(0)));
+                    notebook.setParent(Long.parseLong(cursor.getString(1)));
+                    notebook.setName(cursor.getString(2));
+                    notebook.setDescription(cursor.getString(3));
+
+                    notebooksList.add(notebook);
+                } while (cursor.moveToNext());
+            }
+        }
+        finally {
+            if(cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return notebooksList;
+    }
+
+    public List<Note> getAllNotes() {
+        return getNotes(" where task = 0 and archive = 0 ");
+    }
+
+    public List<NotebookModel> getAllNotebooks() {
+        return getNotebooks("");
     }
 
     public List<Note> getRemovedNotes() {
@@ -171,8 +248,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void remove(long id) {
-        //String query = "delete from " + TABLE_NOTES + " where " + KEY_CREATION + " = " + id;
-        //getDatabase(false).rawQuery(query, null);
         getDatabase(false).delete(TABLE_NOTES, KEY_CREATION + " = " + id, null);
     }
 }

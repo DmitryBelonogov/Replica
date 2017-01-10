@@ -15,6 +15,7 @@ public class Note implements Parcelable {
     private String category = "";
     private int task = 0;
     private int archive = 0;
+    private int notebook = 0;
 
     public Note() {
         creation = new Date().getTime();
@@ -24,6 +25,7 @@ public class Note implements Parcelable {
         category = "category";
         task = 0;
         archive = 0;
+        notebook = 0;
     }
 
     private Note(Parcel source) {
@@ -38,6 +40,7 @@ public class Note implements Parcelable {
         category = data[4];
         task = Integer.parseInt(data[5]);
         archive = Integer.parseInt(data[6]);
+        notebook = Integer.parseInt(data[7]);
     }
 
     public void setCreation(long creation) {
@@ -96,6 +99,14 @@ public class Note implements Parcelable {
         this.archive = archive;
     }
 
+    public void setNotebook(int notebook) {
+        this.notebook = notebook;
+    }
+
+    public int getNotebook() {
+        return notebook;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -110,7 +121,8 @@ public class Note implements Parcelable {
                 content,
                 category,
                 Objects.toString(task, null),
-                Objects.toString(archive, null)
+                Objects.toString(archive, null),
+                Objects.toString(notebook, null)
         });
     }
 

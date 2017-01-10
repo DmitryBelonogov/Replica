@@ -8,5 +8,15 @@ CREATE
         category TEXT,
         task INTEGER,
         done INTEGER,
-        archive INTEGER
+        archive INTEGER,
+        notebook INTEGER
+    );
+
+CREATE
+    TABLE notebooks
+    (
+        id INTEGER PRIMARY KEY,
+        parent INTEGER,
+        name TEXT,
+        description TEXT
     );

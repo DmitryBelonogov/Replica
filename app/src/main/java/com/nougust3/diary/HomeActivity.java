@@ -1,11 +1,9 @@
 package com.nougust3.diary;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -21,7 +19,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
@@ -29,12 +26,8 @@ import com.nougust3.diary.models.adapters.NoteAdapter;
 import com.nougust3.diary.utils.AnimateUtils;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends BaseActivity {
 
@@ -65,13 +58,6 @@ public class HomeActivity extends BaseActivity {
         initEditor();
         initToolbar();
         initNotesList();
-
-        setMode(MODE.NORMAL_MODE);
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -88,8 +74,8 @@ public class HomeActivity extends BaseActivity {
         super.onPrepareOptionsMenu(menu);
 
         if (doneItem != null) {
-           // AnimateUtils.safeAnimate((View) doneItem, 300,
-            //        edit ? Techniques.FlipInX : Techniques.FlipOutX);
+            AnimateUtils.safeAnimate(findViewById(R.id.app_bar_done), 300,
+                    edit ? Techniques.FlipInX : Techniques.FlipOutX);
         }
 
         return true;
@@ -117,6 +103,10 @@ public class HomeActivity extends BaseActivity {
 
                 if(item.getItemId() == R.id.actionTrashItem) {
                     Intent intent = new Intent(HomeActivity.this, TrashActivity.class);
+                    startActivityForResult(intent, 1);
+                }
+                if(item.getItemId() == R.id.actionNotebooksItem) {
+                    Intent intent = new Intent(HomeActivity.this, NotebooksActivity.class);
                     startActivityForResult(intent, 1);
                 }
 
