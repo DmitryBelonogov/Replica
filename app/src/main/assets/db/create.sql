@@ -20,3 +20,11 @@ CREATE
         name TEXT,
         description TEXT
     );
+
+CREATE
+    TABLE tags
+    (
+        id INTEGER PRIMARY KEY,
+        parent INTEGER,
+        name TEXT
+    );

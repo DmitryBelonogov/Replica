@@ -15,7 +15,7 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".EditorView"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".HomeActivity"
             android:label="KEEP"
@@ -44,7 +44,8 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotebooksActivity"></activity>
+        <activity android:name=".NotebooksActivity" />
+        <activity android:name=".NotesActivity"></activity>
     </application>
 
 </manifest>

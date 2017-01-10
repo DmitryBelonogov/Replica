@@ -1,11 +1,14 @@
 package com.nougust3.diary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nougust3.diary.db.DBHelper;
@@ -36,6 +39,7 @@ public class NotebooksActivity extends BaseActivity {
         db = new DBHelper(getApplicationContext());
         dialog = new NewNotebookFragment();
 
+        initList();
         loadNotebooks();
     }
 
@@ -72,8 +76,20 @@ public class NotebooksActivity extends BaseActivity {
         return true;
     }
 
-    private void loadNotebooks() {
+    private void initList() {
         listView = (ListView) findViewById(R.id.listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(NotebooksActivity.this, NotesActivity.class);
+                intent.putExtra("notebookId", adapter.getItem(i).getId());
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void loadNotebooks() {
         notebooksList = db.getAllNotebooks();
         adapter = new NotebookAdapter(this, notebooksList);
         listView.setAdapter(adapter);
