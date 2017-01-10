@@ -1,4 +1,4 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.models.NotebookModel;
 import com.nougust3.diary.models.adapters.NoteAdapter;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class NotesActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(NotesActivity.this, EditorView.class);
+                Intent intent = new Intent(NotesActivity.this, EditorActivity.class);
                 intent.putExtra("creation", list.get(i).getCreation());
                 startActivity(intent);
             }

@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.nougust3.diary.Keep;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.models.NotebookModel;
+import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.utils.Constants;
 
 import java.io.IOException;
@@ -66,7 +66,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i("ww", "DBHelper oncreate");
         try {
             execSqlFile(CREATE_QUERY, db);
         } catch (IOException e) {
@@ -125,7 +124,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return note;
     }
 
-    public NotebookModel updateNotebook(NotebookModel notebook) {
+    public Notebook updateNotebook(Notebook notebook) {
         SQLiteDatabase db = getDatabase(true);
         ContentValues values = new ContentValues();
 
@@ -155,9 +154,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public NotebookModel getNotebook(long id) {
+    public Notebook getNotebook(long id) {
         String where = " WHERE " + KEY_NOTEBOOK_ID + " = " + id;
-        List<NotebookModel> notebooks = getNotebooks(where);
+        List<Notebook> notebooks = getNotebooks(where);
 
         if(notebooks.size() > 0) {
             return notebooks.get(0);
@@ -211,8 +210,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return noteList;
     }
 
-    private List<NotebookModel> getNotebooks(String where) {
-        List<NotebookModel> notebooksList = new ArrayList<>();
+    private List<Notebook> getNotebooks(String where) {
+        List<Notebook> notebooksList = new ArrayList<>();
 
         String query = "SELECT " + KEY_NOTEBOOK_ID + ","
                 + KEY_NOTEBOOK_PARENT + ","
@@ -229,7 +228,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             if(cursor.moveToFirst()) {
                 do {
-                    NotebookModel notebook = new NotebookModel();
+                    Notebook notebook = new Notebook();
                     notebook.setId(Long.parseLong(cursor.getString(0)));
                     notebook.setParent(Long.parseLong(cursor.getString(1)));
                     notebook.setName(cursor.getString(2));
@@ -256,7 +255,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return getNotes(" where notebook = " + id);
     }
 
-    public List<NotebookModel> getAllNotebooks() {
+    public List<Notebook> getAllNotebooks() {
         return getNotebooks("");
     }
 

@@ -1,26 +1,26 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.fragments.NewNotebookFragment;
-import com.nougust3.diary.models.NotebookModel;
+import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.models.adapters.NotebookAdapter;
 
 import java.util.List;
 
 public class NotebooksActivity extends BaseActivity {
 
-    private List<NotebookModel> notebooksList;
+    private List<Notebook> notebooksList;
     private NotebookAdapter adapter;
     private DBHelper db;
 

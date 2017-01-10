@@ -1,4 +1,4 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -11,16 +11,17 @@ import android.widget.Spinner;
 
 import com.fiberlink.maas360.android.richtexteditor.RichEditText;
 import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
+import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.models.NotebookModel;
+import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditorView extends BaseActivity {
+public class EditorActivity extends BaseActivity {
 
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -101,9 +102,9 @@ public class EditorView extends BaseActivity {
 
         notebooks = new ArrayList<>();
         notebooks.add("Inbox");
-        List<NotebookModel> list = DBHelper.getInstance().getAllNotebooks();
+        List<Notebook> list = DBHelper.getInstance().getAllNotebooks();
 
-        for (NotebookModel notebook : list) {
+        for (Notebook notebook : list) {
             notebooks.add(notebook.getName());
         }
 
@@ -159,8 +160,8 @@ public class EditorView extends BaseActivity {
             note.setNotebook(0);
         }
         else {
-            List<NotebookModel> list = DBHelper.getInstance().getAllNotebooks();
-            for(NotebookModel nb : list) {
+            List<Notebook> list = DBHelper.getInstance().getAllNotebooks();
+            for(Notebook nb : list) {
                 if(nb.getName().equals(spinner.getSelectedItem().toString())){
                     note.setNotebook(nb.getId());
                 }

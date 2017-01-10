@@ -4,7 +4,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nougust3.diary.EditorView"
+    tools:context="com.nougust3.diary.ui.EditorActivity"
     android:orientation="vertical"
     android:background="#f6f6f5">
 

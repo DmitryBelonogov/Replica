@@ -14,10 +14,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".EditorView"
+            android:name=".ui.EditorActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.HomeActivity"
             android:label="KEEP"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
@@ -28,14 +28,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TrashActivity"
+            android:name=".ui.TrashActivity"
             android:label="@string/title_activity_trash"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".ui.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ParserActivity">
+        <activity android:name=".ui.ParserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -44,8 +44,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotebooksActivity" />
-        <activity android:name=".NotesActivity"></activity>
+        <activity android:name=".ui.NotebooksActivity" />
+        <activity android:name=".ui.NotesActivity"></activity>
+        <activity android:name=".ui.BaseActivity" />
     </application>
 
 </manifest>

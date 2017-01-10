@@ -5,36 +5,36 @@ import android.os.Parcelable;
 import com.nougust3.diary.utils.Constants;
 import java.util.Date;
 
-public class NotebookModel implements Parcelable {
+public class Notebook implements Parcelable {
 
     private long id;
     private long parent;
     private String name;
     private String description;
 
-    public NotebookModel() {
+    public Notebook() {
         id = new Date().getTime();
         parent = 0;
         name = Constants.notebook_name_default;
         description = Constants.notebook_desc_default;
     }
 
-    private NotebookModel(Parcel in) {
+    private Notebook(Parcel in) {
         id = in.readLong();
         parent = in.readLong();
         name = in.readString();
         description = in.readString();
     }
 
-    public static final Creator<NotebookModel> CREATOR = new Creator<NotebookModel>() {
+    public static final Creator<Notebook> CREATOR = new Creator<Notebook>() {
         @Override
-        public NotebookModel createFromParcel(Parcel in) {
-            return new NotebookModel(in);
+        public Notebook createFromParcel(Parcel in) {
+            return new Notebook(in);
         }
 
         @Override
-        public NotebookModel[] newArray(int size) {
-            return new NotebookModel[size];
+        public Notebook[] newArray(int size) {
+            return new Notebook[size];
         }
     };
 

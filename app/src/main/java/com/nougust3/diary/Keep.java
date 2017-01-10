@@ -3,7 +3,7 @@ package com.nougust3.diary;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import com.nougust3.diary.models.MercuryApi;
+import com.nougust3.diary.api.MercuryApi;
 import com.nougust3.diary.utils.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

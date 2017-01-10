@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.models.holders.NoteViewHolder;
+import com.nougust3.diary.models.holders.NoteHolder;
 import com.nougust3.diary.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class NoteAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Note note = notes.get(position);
-        NoteViewHolder holder;
+        NoteHolder holder;
         View view = convertView;
 
         if(view == null) {
@@ -71,7 +71,7 @@ public class NoteAdapter extends BaseAdapter {
             else {
                 view = inflater.inflate(R.layout.list_item, parent, false);
             }
-            holder = new NoteViewHolder();
+            holder = new NoteHolder();
             holder.checkBox = (CheckBox) view.findViewById(R.id.checkBox);
             holder.dateView = (TextView) view.findViewById(R.id.dateView);
             holder.contentView = (TextView) view.findViewById(R.id.contentView);
@@ -80,7 +80,7 @@ public class NoteAdapter extends BaseAdapter {
             view.setTag(holder);
         }
         else {
-            holder = (NoteViewHolder) view.getTag();
+            holder = (NoteHolder) view.getTag();
         }
 
         if(note.isTask()) {

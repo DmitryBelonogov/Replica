@@ -1,10 +1,8 @@
 package com.nougust3.diary.fragments;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.DialogFragment;
-import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,7 @@ import android.widget.EditText;
 
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
-import com.nougust3.diary.models.NotebookModel;
+import com.nougust3.diary.models.Notebook;
 
 public class NewNotebookFragment extends DialogFragment implements View.OnClickListener {
 
@@ -40,7 +38,7 @@ public class NewNotebookFragment extends DialogFragment implements View.OnClickL
     public void onClick(View v) {
         if(v == btn) {
             DBHelper db = new DBHelper(getActivity());
-            NotebookModel notebook = new NotebookModel();
+            Notebook notebook = new Notebook();
             notebook.setName(nameEdit.getText().toString());
             notebook.setDescription(descEdit.getText().toString());
 

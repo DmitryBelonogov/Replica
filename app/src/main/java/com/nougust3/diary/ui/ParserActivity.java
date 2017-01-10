@@ -1,8 +1,10 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.nougust3.diary.Keep;
+import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Content;
 import com.nougust3.diary.models.Note;

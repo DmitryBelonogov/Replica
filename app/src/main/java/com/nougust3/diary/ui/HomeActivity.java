@@ -1,4 +1,4 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
+import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.adapters.NoteAdapter;
@@ -180,7 +181,7 @@ public class HomeActivity extends BaseActivity {
         notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HomeActivity.this, EditorView.class);
+                Intent intent = new Intent(HomeActivity.this, EditorActivity.class);
 
                 intent.putExtra("creation", notesList.get(position).getCreation());
 

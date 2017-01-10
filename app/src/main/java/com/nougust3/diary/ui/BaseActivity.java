@@ -1,4 +1,4 @@
-package com.nougust3.diary;
+package com.nougust3.diary.ui;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;

@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
-import com.nougust3.diary.models.NotebookModel;
+import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.models.holders.NotebookHolder;
 
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ public class NotebookAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
 
-    private List<NotebookModel> notebooks = new ArrayList<>();
+    private List<Notebook> notebooks = new ArrayList<>();
     private int count;
 
     private Context context;
 
-    public NotebookAdapter(Activity activity, List<NotebookModel> notebooks) {
+    public NotebookAdapter(Activity activity, List<Notebook> notebooks) {
 
         this.notebooks = notebooks;
         context = activity;
@@ -45,7 +45,7 @@ public class NotebookAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        NotebookModel notebook = notebooks.get(position);
+        Notebook notebook = notebooks.get(position);
         NotebookHolder holder;
         View view = convertView;
 
@@ -72,7 +72,7 @@ public class NotebookAdapter extends BaseAdapter {
     }
 
     @Override
-    public NotebookModel getItem(int position) {
+    public Notebook getItem(int position) {
         return notebooks.get(position);
     }
 
