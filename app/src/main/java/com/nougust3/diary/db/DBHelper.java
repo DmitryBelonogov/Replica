@@ -270,4 +270,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public void remove(long id) {
         getDatabase(false).delete(TABLE_NOTES, KEY_CREATION + " = " + id, null);
     }
+
+    public boolean checkNotebook(String name) {
+        List<Notebook> list = getAllNotebooks();
+
+        for (Notebook notebook : list) {
+            if(notebook.getName().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

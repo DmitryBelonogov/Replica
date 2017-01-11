@@ -15,23 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent">
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar_actionbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/primary_light"/>
-
-            </android.support.design.widget.AppBarLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:orientation="vertical"
-            android:layout_marginTop="56dp">
+            android:background="#373737">
 
                 <EditText
                     android:layout_width="match_parent"
@@ -52,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="175dp"
             android:background="#f6f6f5"
             android:id="@+id/notesListView"
             android:paddingLeft="16dp"
@@ -65,7 +53,7 @@
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="195dp"
+            android:layout_marginTop="140dp"
             android:id="@+id/listHeader"
             android:background="#f6f6f5"
             android:paddingLeft="16dp"

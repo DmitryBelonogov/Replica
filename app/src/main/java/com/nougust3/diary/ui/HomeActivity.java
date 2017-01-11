@@ -53,7 +53,7 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_home2);
+        setContentView(R.layout.activity_home);
 
         initNavigation();
         initEditor();
@@ -118,9 +118,9 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
 
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         setMode(MODE.NORMAL_MODE);
     }
 
@@ -136,23 +136,6 @@ public class HomeActivity extends BaseActivity {
                 editFastNote.requestFocusFromTouch();
 
                 return false;
-            }
-        });
-
-        editFastNote.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    if(editFastNote.getText().toString().equals("")) {
-                        setMode(MODE.NORMAL_MODE);
-                    }
-                    editFastNote.setGravity(Gravity.CENTER);
-                    editFastNote.setHint(R.string.edit_fast_note_hint);
-                }
-                else {
-                    editFastNote.setGravity(Gravity.START| Gravity.TOP);
-                    editFastNote.setHint("");
-                }
             }
         });
 
@@ -226,11 +209,14 @@ public class HomeActivity extends BaseActivity {
 
     private void setMode(MODE mode) {
         if(mode == MODE.DONE_MODE) {
-            toolbar.setTitle("Save");
+            editFastNote.setGravity(Gravity.START| Gravity.TOP);
+            editFastNote.setHint("");
+            editFastNote.requestFocus();
             edit = true;
         }
         if(mode == MODE.NORMAL_MODE) {
-            toolbar.setTitle("Keep");
+            editFastNote.setGravity(Gravity.CENTER);
+            editFastNote.setHint(R.string.edit_fast_note_hint);
             edit = false;
             editFastNote.setText("");
             editFastNote.clearFocus();

@@ -2,7 +2,6 @@ package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +11,7 @@ import android.widget.ListView;
 
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
-import com.nougust3.diary.fragments.NewNotebookFragment;
+import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
 import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.models.adapters.NotebookAdapter;
 
@@ -27,14 +26,14 @@ public class NotebooksActivity extends BaseActivity {
     private ListView listView;
     private MenuItem newNotebookItem;
 
-    private DialogFragment dialog;
+    private NewNotebookFragment dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebooks);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         db = new DBHelper(getApplicationContext());
         dialog = new NewNotebookFragment();
@@ -70,7 +69,7 @@ public class NotebooksActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.equals(newNotebookItem)) {
-            dialog.show(getFragmentManager(), "dialog");
+            dialog.show(getSupportFragmentManager(), "dialog");
         }
 
         return true;

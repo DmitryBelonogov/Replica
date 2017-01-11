@@ -18,7 +18,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.HomeActivity"
-            android:label="KEEP"
+            android:label="Keep"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

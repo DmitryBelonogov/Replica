@@ -24,7 +24,7 @@ import java.util.List;
 public class EditorActivity extends BaseActivity {
 
     private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
+       private Toolbar toolbar;
 
     private EditText titleView;
     private RichEditText contentView;
@@ -46,7 +46,7 @@ public class EditorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.editor_view);
+        setContentView(R.layout.activity_editor);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
@@ -93,9 +93,9 @@ public class EditorActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
 
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         titleView = (EditText) findViewById(R.id.titleView);
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -190,7 +190,7 @@ public class EditorActivity extends BaseActivity {
 
     private void setMode(MODE mode) {
         if(mode == MODE.VIEW_MODE) {
-            toolbar.setTitle("");
+//            toolbar.setTitle("");
 
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -201,7 +201,7 @@ public class EditorActivity extends BaseActivity {
         }
 
         if(mode == MODE.EDIT_MODE) {
-            toolbar.setTitle("Save");
+  //          toolbar.setTitle("Save");
 
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);

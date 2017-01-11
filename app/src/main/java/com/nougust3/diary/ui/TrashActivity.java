@@ -33,8 +33,8 @@ public class TrashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trash);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+ //       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+  //      setSupportActionBar(toolbar);
 
         db = new DBHelper(getApplicationContext());
 

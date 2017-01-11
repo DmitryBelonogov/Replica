@@ -20,7 +20,6 @@ public class NotebookAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
     private List<Notebook> notebooks = new ArrayList<>();
-    private int count;
 
     private Context context;
 
@@ -62,7 +61,7 @@ public class NotebookAdapter extends BaseAdapter {
         }
 
         DBHelper db = new DBHelper(context);
-        count = db.getFromNotebook(notebook.getId()).size();
+        int count = db.getFromNotebook(notebook.getId()).size();
 
         holder.nameView.setText(notebook.getName());
         holder.descriptionView.setText(notebook.getDescription());
