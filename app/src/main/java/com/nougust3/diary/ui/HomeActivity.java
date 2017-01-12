@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -203,8 +204,33 @@ public class HomeActivity extends BaseActivity {
         });
 
         notesListView.setScrollingCacheEnabled(true);
+        registerForContextMenu(notesListView);
 
         getNotes();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId()==R.id.notesListView) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle(notesList.get(info.position).getTitle());
+            String[] menuItems = {"Edit", "Set notebook", "Remove"};
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = {"Edit", "Set notebook", "Remove"};
+        String menuItemName = menuItems[menuItemIndex];
+        String listItemName = notesList.get(info.position).getTitle();
+
+        return true;
     }
 
     private void setMode(MODE mode) {

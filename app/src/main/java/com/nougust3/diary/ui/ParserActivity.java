@@ -40,6 +40,7 @@ public class ParserActivity extends BaseActivity {
                 Content content = response.body();
                 note = new Note();
 
+                note.setTitle(content.getTitle());
                 note.setContent(content.getContent());
 
                 saveNote();

@@ -93,10 +93,6 @@ public class EditorActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-//        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-
-//        setSupportActionBar(toolbar);
-
         titleView = (EditText) findViewById(R.id.titleView);
         spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -190,8 +186,6 @@ public class EditorActivity extends BaseActivity {
 
     private void setMode(MODE mode) {
         if(mode == MODE.VIEW_MODE) {
-//            toolbar.setTitle("");
-
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -201,8 +195,6 @@ public class EditorActivity extends BaseActivity {
         }
 
         if(mode == MODE.EDIT_MODE) {
-  //          toolbar.setTitle("Save");
-
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
