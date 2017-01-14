@@ -2,8 +2,10 @@ package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,10 +16,12 @@ import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
 import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.models.adapters.NotebookAdapter;
+import com.nougust3.diary.ui.dialogs.RemoveNotebookFragment;
+import com.nougust3.diary.ui.dialogs.RenameNotebookFragment;
 
 import java.util.List;
 
-public class NotebooksActivity extends BaseActivity {
+public class NotebooksActivity extends BaseActivity implements RenameNotebookFragment.NoticeDialogListener {
 
     private List<Notebook> notebooksList;
     private NotebookAdapter adapter;
@@ -26,7 +30,11 @@ public class NotebooksActivity extends BaseActivity {
     private ListView listView;
     private MenuItem newNotebookItem;
 
-    private NewNotebookFragment dialog;
+    private NewNotebookFragment newNotebookDialog;
+    private RenameNotebookFragment renameNotebookFragment;
+    private RemoveNotebookFragment removeNotebookFragment;
+
+    private int selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +42,9 @@ public class NotebooksActivity extends BaseActivity {
         setContentView(R.layout.activity_notebooks);
 
         db = new DBHelper(getApplicationContext());
-        dialog = new NewNotebookFragment();
+        newNotebookDialog = new NewNotebookFragment();
+        renameNotebookFragment = new RenameNotebookFragment();
+        removeNotebookFragment = new RemoveNotebookFragment();
 
         initList();
         loadNotebooks();
@@ -67,7 +77,7 @@ public class NotebooksActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.equals(newNotebookItem)) {
-            dialog.show(getSupportFragmentManager(), "dialog");
+            newNotebookDialog.show(getSupportFragmentManager(), "newNotebookDialog");
         }
 
         return true;
@@ -84,11 +94,57 @@ public class NotebooksActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showMenu(view, i);
+                return false;
+            }
+        });
     }
 
     private void loadNotebooks() {
         notebooksList = db.getAllNotebooks();
         adapter = new NotebookAdapter(this, notebooksList);
         listView.setAdapter(adapter);
+    }
+
+    private void showMenu(View v, int id) {
+        final int notebookId = id;
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.notebook_item_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.renameNotebookItem:
+                        rename(notebookId);
+                        return true;
+                    case R.id.removeNotebookItem:
+                        remove(notebookId);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popup.show();
+    }
+
+    private void rename(int id) {
+        renameNotebookFragment.show(getSupportFragmentManager(), "renameNotebookDialog");
+    }
+
+    private void remove(int id) {
+        removeNotebookFragment.show(getSupportFragmentManager(), "removeNotebookDialog");
+    }
+
+    @Override
+    public void onDoneClick(DialogFragment dialog) {
+        loadNotebooks();
     }
 }
