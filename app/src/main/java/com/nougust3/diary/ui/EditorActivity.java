@@ -24,7 +24,6 @@ import java.util.List;
 public class EditorActivity extends BaseActivity {
 
     private DrawerLayout drawerLayout;
-       private Toolbar toolbar;
 
     private EditText titleView;
     private RichEditText contentView;

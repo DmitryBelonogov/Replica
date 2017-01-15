@@ -26,6 +26,7 @@ import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.adapters.NoteAdapter;
 import com.nougust3.diary.utils.AnimateUtils;
+import com.nougust3.diary.utils.ContentUtils;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
 import java.util.ArrayList;
@@ -275,6 +276,9 @@ public class HomeActivity extends BaseActivity {
 
     private void getNotes() {
         notesList = db.getAllNotes();
+        for(Note note : notesList) {
+            note.setContent(ContentUtils.htmlToText(note.getContent()));
+        }
         adapter = new NoteAdapter(HomeActivity.this, notesList);
         notesListView.setAdapter(adapter);
     }
