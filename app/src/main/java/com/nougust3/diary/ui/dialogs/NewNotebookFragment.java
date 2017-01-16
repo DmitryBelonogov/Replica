@@ -1,5 +1,6 @@
 package com.nougust3.diary.ui.dialogs;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +18,20 @@ public class NewNotebookFragment extends DialogFragment {
     private EditText nameEdit;
     private EditText descEdit;
 
+    OnCompleteListener listener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (OnCompleteListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnCompleteListener");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -25,13 +40,24 @@ public class NewNotebookFragment extends DialogFragment {
         getDialog().setTitle("New notebook");
 
         Button doneBtn = (Button) v.findViewById(R.id.done);
+        Button cancelBtn = (Button) v.findViewById(R.id.cancel);
         nameEdit = (EditText) v.findViewById(R.id.nameView);
         descEdit = (EditText) v.findViewById(R.id.descriptionView);
+
+        nameEdit.setText("");
+        descEdit.setText("");
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveNotebook();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
             }
         });
 
@@ -52,18 +78,19 @@ public class NewNotebookFragment extends DialogFragment {
         DBHelper.getInstance().updateNotebook(notebook);
 
         dismiss();
+        listener.onComplete();
     }
 
     // TODO Add toast
     private boolean checkName() {
         if(nameEdit.getText().toString().equals("")) {
-            return false;
+            return true;
         }
         if(DBHelper.getInstance().checkNotebook(nameEdit.getText().toString())) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.nougust3.diary.ui.dialogs;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,20 @@ import com.nougust3.diary.models.Notebook;
 public class RemoveNotebookFragment extends DialogFragment {
 
     private Notebook notebook;
+
+    OnCompleteListener listener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (OnCompleteListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnCompleteListener");
+        }
+    }
 
     @NonNull
     @Override
@@ -32,7 +47,7 @@ public class RemoveNotebookFragment extends DialogFragment {
         return builder.create();
     }
 
-    private void setNotebook(String name) {
+    public void setNotebook(String name) {
         notebook = DBHelper.getInstance().getNotebook(
                 DBHelper.getInstance().getNotebookId(name)
         );
@@ -40,5 +55,7 @@ public class RemoveNotebookFragment extends DialogFragment {
 
     private void remove() {
         DBHelper.getInstance().removeNotebook(notebook.getName());
+
+        listener.onComplete();
     }
 }

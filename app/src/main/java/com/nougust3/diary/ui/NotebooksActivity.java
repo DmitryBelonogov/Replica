@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,12 +17,13 @@ import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
 import com.nougust3.diary.models.Notebook;
 import com.nougust3.diary.models.adapters.NotebookAdapter;
+import com.nougust3.diary.ui.dialogs.OnCompleteListener;
 import com.nougust3.diary.ui.dialogs.RemoveNotebookFragment;
 import com.nougust3.diary.ui.dialogs.RenameNotebookFragment;
 
 import java.util.List;
 
-public class NotebooksActivity extends BaseActivity implements RenameNotebookFragment.NoticeDialogListener {
+public class NotebooksActivity extends BaseActivity implements OnCompleteListener {
 
     private List<Notebook> notebooksList;
     private NotebookAdapter adapter;
@@ -33,8 +35,6 @@ public class NotebooksActivity extends BaseActivity implements RenameNotebookFra
     private NewNotebookFragment newNotebookDialog;
     private RenameNotebookFragment renameNotebookFragment;
     private RemoveNotebookFragment removeNotebookFragment;
-
-    private int selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +121,10 @@ public class NotebooksActivity extends BaseActivity implements RenameNotebookFra
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.renameNotebookItem:
-                        rename(notebookId);
+                        rename(notebooksList.get(notebookId).getName());
                         return true;
                     case R.id.removeNotebookItem:
-                        remove(notebookId);
+                        remove(notebooksList.get(notebookId).getName());
                         return true;
                     default:
                         return false;
@@ -135,16 +135,25 @@ public class NotebooksActivity extends BaseActivity implements RenameNotebookFra
         popup.show();
     }
 
-    private void rename(int id) {
+    private void rename(String name) {
+        Log.i("d", "rename");
+        renameNotebookFragment.setName(name);
         renameNotebookFragment.show(getSupportFragmentManager(), "renameNotebookDialog");
     }
 
-    private void remove(int id) {
+    private void remove(String name) {
+        Log.i("d", "remove");
+        removeNotebookFragment.setNotebook(name);
         removeNotebookFragment.show(getSupportFragmentManager(), "removeNotebookDialog");
     }
 
+   //@Override
+    //public void onDoneClick(DialogFragment dialog) {
+     //   loadNotebooks();
+    //}
+
     @Override
-    public void onDoneClick(DialogFragment dialog) {
+    public void onComplete() {
         loadNotebooks();
     }
 }

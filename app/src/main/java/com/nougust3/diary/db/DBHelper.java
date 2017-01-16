@@ -125,6 +125,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Notebook updateNotebook(Notebook notebook) {
+
+        Log.i("Keep", "Update notebook");
+
         SQLiteDatabase db = getDatabase(true);
         ContentValues values = new ContentValues();
 
@@ -260,7 +263,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public long getNotebookId(String name) {
-        return getNotebooks(" where name = " + name).get(0).getId();
+        return getNotebooks(" where name = '" + name + "'").get(0).getId();
     }
 
     public List<Note> getRemovedNotes() {
@@ -272,7 +275,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void removeNotebook(String name) {
-        getDatabase(false).delete(TABLE_NOTEBOOKS, KEY_NOTEBOOK_NAME + " = " + name, null);
+        getDatabase(false).delete(TABLE_NOTEBOOKS, KEY_NOTEBOOK_NAME + " = '" + name + "'", null);
     }
 
     public boolean checkNotebook(String name) {
