@@ -2,7 +2,7 @@ package com.nougust3.diary.ui;
 
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -30,8 +30,11 @@ public class EditorActivity extends BaseActivity {
     private Spinner spinner;
 
     private MenuItem doneItem;
-    private MenuItem editItem;
+    private MenuItem undoItem;
+    private MenuItem redoItem;
+    private MenuItem attachItem;
     private MenuItem removeItem;
+    private MenuItem editItem;
 
     private List<String> notebooks;
 
@@ -53,7 +56,6 @@ public class EditorActivity extends BaseActivity {
         initContent();
 
         loadNote();
-        setMode(MODE.VIEW_MODE);
     }
 
     @Override
@@ -61,9 +63,13 @@ public class EditorActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.editor_menu, menu);
 
         doneItem = menu.findItem(R.id.app_bar_done);
-        editItem = menu.findItem(R.id.app_bar_edit);
+        undoItem = menu.findItem(R.id.app_bar_undo);
+        redoItem = menu.findItem(R.id.app_bar_redo);
+        attachItem = menu.findItem(R.id.app_bar_attach);
         removeItem = menu.findItem(R.id.app_bar_remove);
+        editItem = menu.findItem(R.id.app_bar_edit);
 
+        setMode(MODE.VIEW_MODE);
         return true;
     }
 
@@ -85,6 +91,7 @@ public class EditorActivity extends BaseActivity {
             removeNote();
         }
         else if(item.equals(editItem)) {
+            Log.i("dd", "Set edit mode");
             setMode(MODE.EDIT_MODE);
         }
 
@@ -185,23 +192,38 @@ public class EditorActivity extends BaseActivity {
 
     private void setMode(MODE mode) {
         if(mode == MODE.VIEW_MODE) {
+            editItem.setVisible(true);
+            doneItem.setVisible(false);
+            undoItem.setVisible(false);
+            redoItem.setVisible(false);
+            attachItem.setVisible(false);
+            removeItem.setVisible(false);
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
+                //getSupportActionBar().invalidateOptionsMenu();
             }
 
             titleView.setEnabled(false);
         }
 
         if(mode == MODE.EDIT_MODE) {
+            Log.i("f", "Режим изменен");
+            editItem.setVisible(false);
+            doneItem.setVisible(true);
+            undoItem.setVisible(true);
+            redoItem.setVisible(true);
+            attachItem.setVisible(true);
+            removeItem.setVisible(true);
             if (getSupportActionBar() != null){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setDisplayShowHomeEnabled(false);
+                //getSupportActionBar().invalidateOptionsMenu();
             }
 
             titleView.setEnabled(true);
         }
 
-        invalidateOptionsMenu();
+        //invalidateOptionsMenu();
     }
 }

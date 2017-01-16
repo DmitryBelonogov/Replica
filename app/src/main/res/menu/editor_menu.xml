@@ -6,35 +6,37 @@
         android:id="@+id/app_bar_done"
         android:title="@string/done"
         android:icon="@drawable/ic_done_black_24px"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/app_bar_undo"
         android:title="Undo"
-        android:icon="@drawable/ic_done_black_24px"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_undo_white_24px"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/app_bar_redo"
         android:title="Redo"
-        android:icon="@drawable/ic_done_black_24px"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_redo_white_24px"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/app_bar_attach"
         android:title="Attach"
-        android:icon="@drawable/ic_done_black_24px"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_attach_file_white_24px"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/app_bar_remove"
         android:title="Remove"
-        app:showAsAction="collapseActionView"/>
+        android:icon="@drawable/ic_delete_white_24px"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/app_bar_edit"
         android:title="Edit"
-        app:showAsAction="ifRoom"/>
+        android:icon="@drawable/ic_mode_edit_black_24px"
+        app:showAsAction="always"/>
 
 
 </menu>
