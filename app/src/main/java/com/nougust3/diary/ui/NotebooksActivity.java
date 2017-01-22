@@ -46,8 +46,10 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
         renameNotebookFragment = new RenameNotebookFragment();
         removeNotebookFragment = new RemoveNotebookFragment();
 
+        initNavigation();
         initList();
         loadNotebooks();
+        updateCounter();
     }
 
 
@@ -105,7 +107,12 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
     }
 
     private void loadNotebooks() {
+        Notebook inboxNotebook = new Notebook();
+        inboxNotebook.setId(0);
+        inboxNotebook.setName("Inbox");
+        inboxNotebook.setDescription("Unsorted notes");
         notebooksList = db.getAllNotebooks();
+        notebooksList.add(0, inboxNotebook);
         adapter = new NotebookAdapter(this, notebooksList);
         listView.setAdapter(adapter);
     }
@@ -136,13 +143,11 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
     }
 
     private void rename(String name) {
-        Log.i("d", "rename");
         renameNotebookFragment.setName(name);
         renameNotebookFragment.show(getSupportFragmentManager(), "renameNotebookDialog");
     }
 
     private void remove(String name) {
-        Log.i("d", "remove");
         removeNotebookFragment.setNotebook(name);
         removeNotebookFragment.show(getSupportFragmentManager(), "removeNotebookDialog");
     }
@@ -156,4 +161,7 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
     public void onComplete() {
         loadNotebooks();
     }
+
+    @Override
+    public void onRemoved() { }
 }

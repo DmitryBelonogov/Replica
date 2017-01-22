@@ -1,12 +1,7 @@
 package com.nougust3.diary.ui;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,6 +11,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,9 +22,7 @@ import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.adapters.NoteAdapter;
 import com.nougust3.diary.utils.AnimateUtils;
-import com.nougust3.diary.utils.ContentUtils;
 import com.nougust3.diary.utils.DateUtils;
-import com.nougust3.diary.utils.KeyboardUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +32,11 @@ public class HomeActivity extends BaseActivity {
     private DBHelper db;
     private ListAdapter adapter;
     private List<Note> notesList;
-    private DrawerLayout drawerLayout;
     private TextView listHeader;
 
-    private Toolbar toolbar;
     private MenuItem doneItem;
+    private MenuItem moveItem;
+    private MenuItem removeItem;
     private ListView notesListView;
 
     private boolean edit = false;
@@ -57,10 +51,11 @@ public class HomeActivity extends BaseActivity {
 
         setContentView(R.layout.activity_home);
 
-        initNavigation();
+        init();
         initEditor();
         initToolbar();
         initNotesList();
+        updateCounter();
     }
 
     @Override
@@ -68,6 +63,8 @@ public class HomeActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.home_menu, menu);
 
         doneItem = menu.findItem(R.id.app_bar_done);
+        moveItem = menu.findItem(R.id.app_bar_move);
+        removeItem = menu.findItem(R.id.app_bar_remove);
 
         return true;
     }
@@ -77,6 +74,14 @@ public class HomeActivity extends BaseActivity {
         super.onPrepareOptionsMenu(menu);
 
         if (doneItem != null) {
+            AnimateUtils.safeAnimate(findViewById(R.id.app_bar_done), 300,
+                    edit ? Techniques.FlipInX : Techniques.FlipOutX);
+        }
+        if (moveItem != null) {
+            AnimateUtils.safeAnimate(findViewById(R.id.app_bar_done), 300,
+                    edit ? Techniques.FlipInX : Techniques.FlipOutX);
+        }
+        if (removeItem != null) {
             AnimateUtils.safeAnimate(findViewById(R.id.app_bar_done), 300,
                     edit ? Techniques.FlipInX : Techniques.FlipOutX);
         }
@@ -94,35 +99,12 @@ public class HomeActivity extends BaseActivity {
         return true;
     }
 
-    private void initNavigation() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawers();
-
-                if(item.getItemId() == R.id.actionTrashItem) {
-                    Intent intent = new Intent(HomeActivity.this, TrashActivity.class);
-                    startActivityForResult(intent, 1);
-                }
-                if(item.getItemId() == R.id.actionNotebooksItem) {
-                    Intent intent = new Intent(HomeActivity.this, NotebooksActivity.class);
-                    startActivityForResult(intent, 1);
-                }
-
-                return false;
-            }
-        });
-
+    private void init() {
+        initNavigation();
+        initFAB();
     }
 
     private void initToolbar() {
-//        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-
-//        setSupportActionBar(toolbar);
         setMode(MODE.NORMAL_MODE);
     }
 
@@ -162,25 +144,15 @@ public class HomeActivity extends BaseActivity {
         listHeader = (TextView)findViewById(R.id.listHeader);
 
         notesListView.setAdapter(adapter);
+        notesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        notesListView.setItemsCanFocus(false);
 
         notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HomeActivity.this, EditorActivity.class);
-
-                intent.putExtra("creation", notesList.get(position).getCreation());
-
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        notesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent,
-                                           View view, int position, long id) {
-                notesList.get(position).setArchive(1);
-                getNotes();
-                return false;
+               Intent intent = new Intent(HomeActivity.this, EditorActivity.class);
+               intent.putExtra("creation", notesList.get(position).getCreation());
+               startActivityForResult(intent, 1);
             }
         });
 
@@ -205,33 +177,8 @@ public class HomeActivity extends BaseActivity {
         });
 
         notesListView.setScrollingCacheEnabled(true);
-        registerForContextMenu(notesListView);
 
         getNotes();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.notesListView) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(notesList.get(info.position).getTitle());
-            String[] menuItems = {"Edit", "Set notebook", "Remove"};
-            for (int i = 0; i < menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
-            }
-        }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        int menuItemIndex = item.getItemId();
-        String[] menuItems = {"Edit", "Set notebook", "Remove"};
-        String menuItemName = menuItems[menuItemIndex];
-        String listItemName = notesList.get(info.position).getTitle();
-
-        return true;
     }
 
     private void setMode(MODE mode) {
@@ -247,7 +194,7 @@ public class HomeActivity extends BaseActivity {
             edit = false;
             editFastNote.setText("");
             editFastNote.clearFocus();
-            KeyboardUtils.hide(drawerLayout, getApplicationContext());
+            //KeyboardUtils.hide(drawerLayout, getApplicationContext());
         }
 
         invalidateOptionsMenu();
@@ -266,6 +213,7 @@ public class HomeActivity extends BaseActivity {
         note.setContent(editFastNote.getText().toString());
         note.setIsTask(0);
         note.setArchive(0);
+        note.setNotebook(0);
 
         db.updateNote(note);
 
@@ -276,17 +224,12 @@ public class HomeActivity extends BaseActivity {
 
     private void getNotes() {
         notesList = db.getAllNotes();
-        for(Note note : notesList) {
-            note.setContent(ContentUtils.htmlToText(note.getContent()));
-        }
         adapter = new NoteAdapter(HomeActivity.this, notesList);
         notesListView.setAdapter(adapter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 1) {
-            getNotes();
-        }
+        if(resultCode == 1) getNotes();
     }
 }

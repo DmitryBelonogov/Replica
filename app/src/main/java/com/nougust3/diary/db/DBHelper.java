@@ -1,5 +1,6 @@
 package com.nougust3.diary.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -46,13 +47,15 @@ public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase db = null;
 
     private final Context context;
+
+    @SuppressLint("StaticFieldLeak")
     private static DBHelper instance = null;
 
     public static synchronized DBHelper getInstance() {
         return getInstance(Keep.getAppContext());
     }
 
-    public static synchronized DBHelper getInstance(Context context) {
+    private static synchronized DBHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DBHelper(context);
         }
@@ -278,6 +281,10 @@ public class DBHelper extends SQLiteOpenHelper {
         getDatabase(false).delete(TABLE_NOTEBOOKS, KEY_NOTEBOOK_NAME + " = '" + name + "'", null);
     }
 
+    public void removeNote(long creation) {
+        getDatabase(false).delete(TABLE_NOTES, KEY_CREATION + " = " + creation, null);
+    }
+
     public boolean checkNotebook(String name) {
         List<Notebook> list = getAllNotebooks();
 
@@ -288,5 +295,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return false;
+    }
+
+    public String getInboxSize() {
+        return String.valueOf(getNotes(" where " + KEY_NOTEBOOK + " = " + 0).size());
     }
 }

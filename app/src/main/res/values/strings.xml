@@ -81,4 +81,5 @@
     <string name="title_activity_trash">TrashActivity</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="notebook.name.default">New notebook</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>

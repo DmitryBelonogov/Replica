@@ -12,6 +12,7 @@ import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.holders.NoteHolder;
+import com.nougust3.diary.utils.ContentUtils;
 import com.nougust3.diary.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,13 @@ public class NoteAdapter extends BaseAdapter {
     private List<Note> notes = new ArrayList<>();
 
     public NoteAdapter(Activity activity, List<Note> notes) {
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         this.notes = notes;
 
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        for(Note note : this.notes) {
+            note.setContent(ContentUtils.htmlToText(note.getContent()));
+        }
     }
 
     @Override

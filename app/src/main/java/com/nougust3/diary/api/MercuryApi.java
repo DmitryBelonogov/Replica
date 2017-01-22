@@ -11,8 +11,8 @@ import com.nougust3.diary.utils.Constants;
 public interface MercuryApi {
 
     @Headers({
-        "Content-Type: application/json",
-        "x-api-key: " + Constants.PARSER_API_KEY
+        "Content-Type: application/json;charset=utf-8",
+            "x-api-key: " + Constants.PARSER_API_KEY
     })
     @GET("/parser")
     Call<Content> getData(@Query("url") String url);

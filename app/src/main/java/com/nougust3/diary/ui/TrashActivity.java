@@ -36,7 +36,9 @@ public class TrashActivity extends BaseActivity {
 
         db = new DBHelper(getApplicationContext());
 
+        initNavigation();
         initList();
+        updateCounter();
     }
 
     @Override

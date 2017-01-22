@@ -16,7 +16,7 @@ import com.nougust3.diary.models.adapters.NoteAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesActivity extends AppCompatActivity {
+public class NotesActivity extends BaseActivity {
 
     private ListView listView;
 
@@ -38,9 +38,12 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
-        long id = getIntent().getLongExtra("notebookId", 0);
+        long id = getIntent().getLongExtra("notebookId", 0L);
 
+        initNavigation();
+        initFAB();
         loadNotes(id);
+        updateCounter();
     }
 
     public void loadNotes(long notebookId) {

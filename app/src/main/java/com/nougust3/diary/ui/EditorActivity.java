@@ -2,9 +2,10 @@ package com.nougust3.diary.ui;
 
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -15,13 +16,16 @@ import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.Notebook;
+import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
+import com.nougust3.diary.ui.dialogs.OnCompleteListener;
+import com.nougust3.diary.ui.dialogs.RemoveNoteFragment;
 import com.nougust3.diary.utils.DateUtils;
 import com.nougust3.diary.utils.KeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditorActivity extends BaseActivity {
+public class EditorActivity extends BaseActivity implements OnCompleteListener {
 
     private DrawerLayout drawerLayout;
 
@@ -40,6 +44,9 @@ public class EditorActivity extends BaseActivity {
 
     private Note note;
 
+    private NewNotebookFragment newNotebookDialog;
+    private RemoveNoteFragment removeNoteFragment;
+
     private enum MODE {
         VIEW_MODE, EDIT_MODE
     }
@@ -51,6 +58,9 @@ public class EditorActivity extends BaseActivity {
         setContentView(R.layout.activity_editor);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        newNotebookDialog = new NewNotebookFragment();
+        removeNoteFragment = new RemoveNoteFragment();
 
         initToolbar();
         initContent();
@@ -69,7 +79,13 @@ public class EditorActivity extends BaseActivity {
         removeItem = menu.findItem(R.id.app_bar_remove);
         editItem = menu.findItem(R.id.app_bar_edit);
 
-        setMode(MODE.VIEW_MODE);
+        if(getIntent().getLongExtra("creation", 0L) == 0L) {
+            setMode(MODE.EDIT_MODE);
+        }
+        else {
+            setMode(MODE.VIEW_MODE);
+        }
+
         return true;
     }
 
@@ -88,11 +104,17 @@ public class EditorActivity extends BaseActivity {
             saveNote();
         }
         else if(item.equals(removeItem)) {
-            removeNote();
+            removeNoteFragment.setNote(note.getCreation());
+            removeNoteFragment.show(getSupportFragmentManager(), "removeNoteFragment");
         }
         else if(item.equals(editItem)) {
-            Log.i("dd", "Set edit mode");
             setMode(MODE.EDIT_MODE);
+        }
+        else if(item.equals(undoItem)) {
+            contentView.getmEditor().undo();
+        }
+        else if(item.equals(redoItem)) {
+            contentView.getmEditor().redo();
         }
 
         return true;
@@ -100,6 +122,11 @@ public class EditorActivity extends BaseActivity {
 
     private void initToolbar() {
         titleView = (EditText) findViewById(R.id.titleView);
+
+        initNotebooksSpinner();
+    }
+
+    private void initNotebooksSpinner() {
         spinner = (Spinner) findViewById(R.id.spinner);
 
         notebooks = new ArrayList<>();
@@ -110,11 +137,23 @@ public class EditorActivity extends BaseActivity {
             notebooks.add(notebook.getName());
         }
 
+        notebooks.add("New notebook");
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, notebooks);
+                R.layout.editor_spinner_item, notebooks);
         spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(position == spinner.getCount() - 1) {
+                    newNotebookDialog.show(getSupportFragmentManager(), "newNotebookDialog");
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+        });
     }
 
     private void initContent() {
@@ -127,7 +166,14 @@ public class EditorActivity extends BaseActivity {
         DBHelper db = new DBHelper(getApplicationContext());
 
         long creation = getIntent().getLongExtra("creation", 0);
-        note = db.getNote(creation);
+
+        if(creation == 0) {
+            //setMode(MODE.EDIT_MODE);
+            note = new Note();
+        }
+        else {
+            note = db.getNote(creation);
+        }
 
         if(note.getTitle().equals("") || note.getTitle().equals("title")){
             titleView.setText("");
@@ -178,18 +224,6 @@ public class EditorActivity extends BaseActivity {
         finish();
     }
 
-    private void removeNote() {
-        DBHelper db = new DBHelper(getContext());
-
-        note.setArchive(1);
-        db.updateNote(note);
-
-        KeyboardUtils.hide(drawerLayout, getContext());
-
-        setResult(1);
-        finish();
-    }
-
     private void setMode(MODE mode) {
         if(mode == MODE.VIEW_MODE) {
             editItem.setVisible(true);
@@ -198,32 +232,48 @@ public class EditorActivity extends BaseActivity {
             redoItem.setVisible(false);
             attachItem.setVisible(false);
             removeItem.setVisible(false);
+
             if (getSupportActionBar() != null){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-                //getSupportActionBar().invalidateOptionsMenu();
+                //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                //getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
 
             titleView.setEnabled(false);
         }
 
         if(mode == MODE.EDIT_MODE) {
-            Log.i("f", "Режим изменен");
             editItem.setVisible(false);
             doneItem.setVisible(true);
             undoItem.setVisible(true);
             redoItem.setVisible(true);
             attachItem.setVisible(true);
             removeItem.setVisible(true);
+
             if (getSupportActionBar() != null){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                getSupportActionBar().setDisplayShowHomeEnabled(false);
-                //getSupportActionBar().invalidateOptionsMenu();
+                //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                //getSupportActionBar().setDisplayShowHomeEnabled(false);
             }
 
             titleView.setEnabled(true);
         }
+    }
 
-        //invalidateOptionsMenu();
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onComplete() {
+        initNotebooksSpinner();
+        spinner.setSelection(1);
+    }
+
+    @Override
+    public void onRemoved() {
+        KeyboardUtils.hide(drawerLayout, getContext());
+        setResult(1);
+        finish();
     }
 }

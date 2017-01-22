@@ -35,19 +35,6 @@
 
         </RelativeLayout>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="175dp"
-            android:background="#f6f6f5"
-            android:id="@+id/notesListView"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="5dp"
-            android:dividerHeight="0dp"
-            android:divider="@null" />
-
         <TextView
             android:text="TextView"
             android:layout_width="match_parent"
@@ -59,6 +46,22 @@
             android:textSize="16sp"
             android:gravity="center_vertical|start"/>
 
+        <include layout="@layout/fab" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="175dp"
+            android:background="#f6f6f5"
+            android:id="@+id/notesListView"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="5dp"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+
     </android.support.design.widget.CoordinatorLayout>
 
 
@@ -67,7 +70,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#eee"
-        app:menu="@menu/navigation_menu"/>
+        android:background="#373737"
+        app:itemTextColor="@color/navigation_text"
+        app:menu="@menu/navigation_menu"
+        app:itemIconTint="@color/navigation_text" />
+
 
 </android.support.v4.widget.DrawerLayout>

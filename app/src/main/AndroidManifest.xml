@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.NotebooksActivity" />
-        <activity android:name=".ui.NotesActivity"></activity>
+        <activity android:name=".ui.NotesActivity" />
         <activity android:name=".ui.BaseActivity" />
     </application>
 

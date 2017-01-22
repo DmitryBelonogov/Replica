@@ -14,44 +14,53 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="90dp"
             android:background="#373737"
             android:orientation="vertical"
             android:gravity="center_vertical">
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:inputType="text"
                 android:id="@+id/titleView"
                 android:layout_weight="1"
-                android:textColor="#f6f6f5"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:background="@null" />
+                android:textColor="@color/navigation_text"
+                android:gravity="start|center_vertical"
+                android:background="@null"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="20sp" />
 
             <Spinner
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:id="@+id/spinner"
-                android:textColor="#f6f6f5" />
+                android:textColor="#f6f6f5"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
-        <com.fiberlink.maas360.android.richtexteditor.RichEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/contentView"
-            android:layout_gravity="top|fill_horizontal"
-            android:layout_marginTop="80dp"/>
-
-       <com.fiberlink.maas360.android.richtexteditor.RichTextActions
-           android:id="@+id/rich_text_actions"
+       <LinearLayout
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_alignParentBottom="true" />
+           android:layout_height="match_parent"
+           android:layout_marginTop="90dp" >
+
+            <com.fiberlink.maas360.android.richtexteditor.RichEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/contentView"
+                android:layout_gravity="top|fill_horizontal" />
+
+       </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <com.fiberlink.maas360.android.richtexteditor.RichTextActions
+        android:id="@+id/rich_text_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom" />
 </android.support.v4.widget.DrawerLayout>
