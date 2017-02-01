@@ -1,33 +1,45 @@
 package com.nougust3.diary.ui;
 
-import android.support.v4.widget.DrawerLayout;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
 import com.fiberlink.maas360.android.richtexteditor.RichEditText;
 import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
+import com.fiberlink.maas360.android.richtexteditor.RichWebView;
+
 import com.nougust3.diary.R;
-import com.nougust3.diary.db.DBHelper;
-import com.nougust3.diary.models.Note;
-import com.nougust3.diary.models.Notebook;
+import com.nougust3.diary.Views.EditorView;
 import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
-import com.nougust3.diary.ui.dialogs.OnCompleteListener;
+import com.nougust3.diary.ui.dialogs.EditorDialogsListener;
 import com.nougust3.diary.ui.dialogs.RemoveNoteFragment;
-import com.nougust3.diary.utils.DateUtils;
-import com.nougust3.diary.utils.KeyboardUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class EditorActivity extends BaseActivity implements OnCompleteListener {
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-    private DrawerLayout drawerLayout;
+import Presenters.EditorPresenter;
+
+public class EditorActivity extends MvpAppCompatActivity implements EditorView, EditorDialogsListener {
+
+    @InjectPresenter
+    EditorPresenter editorPresenter;
+
+    private FloatingActionButton fab;
 
     private EditText titleView;
     private RichEditText contentView;
@@ -36,36 +48,175 @@ public class EditorActivity extends BaseActivity implements OnCompleteListener {
     private MenuItem doneItem;
     private MenuItem undoItem;
     private MenuItem redoItem;
-    private MenuItem attachItem;
     private MenuItem removeItem;
-    private MenuItem editItem;
 
-    private List<String> notebooks;
-
-    private Note note;
-
+    private ProgressDialog progressDialog;
     private NewNotebookFragment newNotebookDialog;
     private RemoveNoteFragment removeNoteFragment;
 
-    private enum MODE {
-        VIEW_MODE, EDIT_MODE
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_editor);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        spinner = (Spinner) findViewById(R.id.spinner);
+        titleView = (EditText) findViewById(R.id.titleView);
+        contentView = (RichEditText) findViewById(R.id.contentView);
+        contentView.setRichTextActionsView((RichTextActions) findViewById(R.id.rich_text_actions));
 
         newNotebookDialog = new NewNotebookFragment();
         removeNoteFragment = new RemoveNoteFragment();
 
-        initToolbar();
-        initContent();
+        contentView.getmEditor().setOnScrollChangedCallback(new RichWebView.OnScrollChangedCallback() {
+            @Override
+            public void onScrollChange(WebView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                editorPresenter.onScrollNote(scrollY, oldScrollY);
+            }
+        });
 
-        loadNote();
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editorPresenter.onEditNote();
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(position == spinner.getCount() - 1) {
+                    //newNotebookDialog.show(getSupportFragmentManager(), "newNotebookDialog");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+        });
+
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void showToolbar() {
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
+    }
+
+    @Override
+    public void hideToolbar() {
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+    }
+
+    @Override
+    public void showFAB() {
+        fab.show();
+    }
+
+    @Override
+    public void hideFAB() {
+        fab.hide();
+    }
+
+    @Override
+    public void disableViews() {
+        titleView.setEnabled(false);
+        spinner.setEnabled(false);
+        contentView.setFocusable(false);
+    }
+
+    @Override
+    public void enableViews() {
+        titleView.setEnabled(true);
+        spinner.setEnabled(true);
+        contentView.setFocusable(true);
+    }
+
+    @Override
+    public void createProgressDialog(String msg) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(msg);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        progressDialog.hide();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        titleView.setText(title);
+    }
+
+    @Override
+    public void setContent(String content) {
+        contentView.setHtml(content);
+    }
+
+    @Override
+    public void setNotebook(String notebook) {
+        for (int i = 0; i < spinner.getCount(); i ++) {
+            if(spinner.getItemAtPosition(i).toString().equals(notebook)) {
+                spinner.setSelection(i);
+            }
+        }
+    }
+
+    @Override
+    public void checkIntents() {
+        if(getIntent().getType() != null &&
+                Intent.ACTION_SEND.equals(getIntent().getAction()) &&
+                "text/plain".equals(getIntent().getType())) {
+            editorPresenter.onParseHtml(getIntent().getStringExtra(Intent.EXTRA_TEXT));
+        }
+        else {
+            long creation = getIntent().getLongExtra("creation5", 0);
+
+            if(creation != 0) {
+                editorPresenter.onLoadNote(creation);
+            }
+            else {
+                editorPresenter.onCreateNote();
+                editorPresenter.onSetNotebook(getIntent().getLongExtra("notebook", 0));
+            }
+        }
+    }
+
+    @Override
+    public void showRemoveDialog() {
+        removeNoteFragment.show(getSupportFragmentManager(), "Remove note fragment");
+    }
+
+    @Override
+    public void onRemove() {
+        editorPresenter.onRemoveConfirm();
+    }
+
+    @Override
+    public void showNewNotebookDialog() {
+        newNotebookDialog.show(getSupportFragmentManager(), "New notebook dialog");
+    }
+
+    @Override
+    public void onNewNotebook() {
+        editorPresenter.onNewNotebook();
+    }
+
+    @Override
+    public void onFinish() {
+        finish();
     }
 
     @Override
@@ -75,23 +226,7 @@ public class EditorActivity extends BaseActivity implements OnCompleteListener {
         doneItem = menu.findItem(R.id.app_bar_done);
         undoItem = menu.findItem(R.id.app_bar_undo);
         redoItem = menu.findItem(R.id.app_bar_redo);
-        attachItem = menu.findItem(R.id.app_bar_attach);
         removeItem = menu.findItem(R.id.app_bar_remove);
-        editItem = menu.findItem(R.id.app_bar_edit);
-
-        if(getIntent().getLongExtra("creation", 0L) == 0L) {
-            setMode(MODE.EDIT_MODE);
-        }
-        else {
-            setMode(MODE.VIEW_MODE);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
 
         return true;
     }
@@ -100,15 +235,14 @@ public class EditorActivity extends BaseActivity implements OnCompleteListener {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.equals(doneItem)) {
-            setMode(MODE.VIEW_MODE);
-            saveNote();
+            editorPresenter.onSaveNote(
+                    titleView.getText().toString(),
+                    spinner.getSelectedItem().toString(),
+                    contentView.getHtml()
+            );
         }
         else if(item.equals(removeItem)) {
-            removeNoteFragment.setNote(note.getCreation());
-            removeNoteFragment.show(getSupportFragmentManager(), "removeNoteFragment");
-        }
-        else if(item.equals(editItem)) {
-            setMode(MODE.EDIT_MODE);
+            editorPresenter.onRemoveNote();
         }
         else if(item.equals(undoItem)) {
             contentView.getmEditor().undo();
@@ -120,160 +254,18 @@ public class EditorActivity extends BaseActivity implements OnCompleteListener {
         return true;
     }
 
-    private void initToolbar() {
-        titleView = (EditText) findViewById(R.id.titleView);
-
-        initNotebooksSpinner();
-    }
-
-    private void initNotebooksSpinner() {
-        spinner = (Spinner) findViewById(R.id.spinner);
-
-        notebooks = new ArrayList<>();
-        notebooks.add("Inbox");
-        List<Notebook> list = DBHelper.getInstance().getAllNotebooks();
-
-        for (Notebook notebook : list) {
-            notebooks.add(notebook.getName());
-        }
-
+    @Override
+    public void populateSpinner(ArrayList<String> notebooks) {
         notebooks.add("New notebook");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.editor_spinner_item, notebooks);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if(position == spinner.getCount() - 1) {
-                    newNotebookDialog.show(getSupportFragmentManager(), "newNotebookDialog");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) { }
-        });
-    }
-
-    private void initContent() {
-        contentView = (RichEditText) findViewById(R.id.contentView);
-        RichTextActions richTextActions = (RichTextActions) findViewById(R.id.rich_text_actions);
-        contentView.setRichTextActionsView(richTextActions);
-    }
-
-    private void loadNote() {
-        DBHelper db = new DBHelper(getApplicationContext());
-
-        long creation = getIntent().getLongExtra("creation", 0);
-
-        if(creation == 0) {
-            //setMode(MODE.EDIT_MODE);
-            note = new Note();
-        }
-        else {
-            note = db.getNote(creation);
-        }
-
-        if(note.getTitle().equals("") || note.getTitle().equals("title")){
-            titleView.setText("");
-            titleView.setHint("Без названия");
-        }
-        else {
-            titleView.setText(note.getTitle());
-        }
-
-        if(note.getNotebook() == 0) {
-            spinner.setSelection(0);
-        }
-        else {
-            String name = DBHelper.getInstance().getNotebook(note.getNotebook()).getName();
-            for (int i = 0; i < notebooks.size(); i ++) {
-                if(notebooks.get(i).equals(name)) {
-                    spinner.setSelection(i);
-                }
-            }
-        }
-
-        contentView.setHtml(note.getContent());
-    }
-
-    private void saveNote() {
-        DBHelper db = new DBHelper(getContext());
-
-        note.setModification(DateUtils.getTimeInMillis());
-        note.setTitle(titleView.getText().toString());
-        note.setContent(contentView.getHtml());
-        if(spinner.getSelectedItem().toString().equals("Inbox")) {
-            note.setNotebook(0);
-        }
-        else {
-            List<Notebook> list = DBHelper.getInstance().getAllNotebooks();
-            for(Notebook nb : list) {
-                if(nb.getName().equals(spinner.getSelectedItem().toString())){
-                    note.setNotebook(nb.getId());
-                }
-            }
-        }
-
-        db.updateNote(note);
-
-        KeyboardUtils.hide(drawerLayout, getContext());
-
-        setResult(1);
-        finish();
-    }
-
-    private void setMode(MODE mode) {
-        if(mode == MODE.VIEW_MODE) {
-            editItem.setVisible(true);
-            doneItem.setVisible(false);
-            undoItem.setVisible(false);
-            redoItem.setVisible(false);
-            attachItem.setVisible(false);
-            removeItem.setVisible(false);
-
-            if (getSupportActionBar() != null){
-                //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                //getSupportActionBar().setDisplayShowHomeEnabled(true);
-            }
-
-            titleView.setEnabled(false);
-        }
-
-        if(mode == MODE.EDIT_MODE) {
-            editItem.setVisible(false);
-            doneItem.setVisible(true);
-            undoItem.setVisible(true);
-            redoItem.setVisible(true);
-            attachItem.setVisible(true);
-            removeItem.setVisible(true);
-
-            if (getSupportActionBar() != null){
-                //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                //getSupportActionBar().setDisplayShowHomeEnabled(false);
-            }
-
-            titleView.setEnabled(true);
-        }
+        spinner.setAdapter(new ArrayAdapter<>(this, R.layout.editor_spinner_item, notebooks));
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onComplete() {
-        initNotebooksSpinner();
-        spinner.setSelection(1);
-    }
-
-    @Override
-    public void onRemoved() {
-        KeyboardUtils.hide(drawerLayout, getContext());
-        setResult(1);
-        finish();
+    public Context getContext() {
+        return getApplicationContext();
     }
 }

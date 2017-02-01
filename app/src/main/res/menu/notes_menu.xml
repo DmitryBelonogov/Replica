@@ -21,5 +21,4 @@
         android:title="Remove"
         android:icon="@drawable/ic_delete_white_24px"
         app:showAsAction="collapseActionView" />
-
 </menu>

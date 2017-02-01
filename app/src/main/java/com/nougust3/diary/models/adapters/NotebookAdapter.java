@@ -2,6 +2,7 @@ package com.nougust3.diary.models.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,15 @@ public class NotebookAdapter extends BaseAdapter {
 
     private List<Notebook> notebooks = new ArrayList<>();
 
+    private SparseBooleanArray selectedItemsId;
+
     private Context context;
 
     public NotebookAdapter(Activity activity, List<Notebook> notebooks) {
 
         this.notebooks = notebooks;
         context = activity;
+        selectedItemsId = new SparseBooleanArray();
 
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -65,9 +69,41 @@ public class NotebookAdapter extends BaseAdapter {
 
         holder.nameView.setText(notebook.getName());
         holder.descriptionView.setText(notebook.getDescription());
-        holder.countView.setText(count + " notes");
+        if(count == 0) {
+            holder.countView.setText("Empty");
+        }
+        else {
+            holder.countView.setText(count + " notes");
+        }
 
         return view;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !selectedItemsId.get(position));
+    }
+
+    public void removeSelection() {
+        selectedItemsId = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return selectedItemsId.size();
+    }
+
+    public SparseBooleanArray getSelectedId() {
+        return selectedItemsId;
+    }
+
+    public void selectView(int position, boolean value) {
+        if(value) {
+            selectedItemsId.put(position, value);
+        }
+        else {
+            selectedItemsId.delete(position);
+            notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -2,8 +2,10 @@ package com.nougust3.diary.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -15,17 +17,27 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends MvpAppCompatActivity {
 
     private TextView inboxCount;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FloatingActionButton fab;
+
+    private long notebookId;
+    private long noteId;
+
+    //private SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+    //public SharedPreferences getPrefs() {
+        //return sp;
+    //}
 
     public void initFAB() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -34,10 +46,15 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), EditorActivity.class);
-                intent.putExtra("creation", 0);
+                intent.putExtra("creation5", noteId);
+                intent.putExtra("notebook", notebookId);
                 startActivityForResult(intent, 1);
             }
         });
+    }
+
+    public FloatingActionButton getFAB() {
+        return fab;
     }
 
     public void initNavigation() {
@@ -52,8 +69,6 @@ public class BaseActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        //drawerLayout.closeDrawers();
-
                         if(item.getItemId() == R.id.actionInboxItem) {
                             Intent intent = new Intent(getContext(), NotesActivity.class);
                             intent.putExtra("notebookId", 0L);
@@ -67,10 +82,19 @@ public class BaseActivity extends AppCompatActivity {
                             Intent intent = new Intent(getContext(), NotebooksActivity.class);
                             startActivityForResult(intent, 1);
                         }
+                        else if(item.getItemId() == R.id.actionSettingsItem) {
+                            Intent intent = new Intent(getContext(), SettingsActivity.class);
+                            startActivity(intent);
+                        }
 
                         return false;
                     }
                 });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     public void updateCounter() {
@@ -82,8 +106,23 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showToast(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setNoteId(long noteId) {
+        this.noteId = noteId;
+    }
+
+    public long getNoteId() {
+        return noteId;
+    }
+
+    public void setNotebookId(long notebookId) {
+        this.notebookId = notebookId;
+    }
+
+    public long getNotebookId() {
+        return notebookId;
     }
 
     @Override
@@ -93,13 +132,4 @@ public class BaseActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
         }
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(drawerLayout != null) {
-            drawerLayout.closeDrawers();
-        }
-    }
-
 }

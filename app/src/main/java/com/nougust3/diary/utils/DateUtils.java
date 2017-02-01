@@ -11,7 +11,7 @@ public class DateUtils {
 
     public static long getTimeInMillis() {
         if(calendar != null) {
-            return calendar.getTimeInMillis();
+            return Calendar.getInstance().getTimeInMillis();
         }
         else {
             Log.w("KEEP", "DateUtils.calender == null");

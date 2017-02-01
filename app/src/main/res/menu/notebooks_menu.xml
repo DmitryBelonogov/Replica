@@ -4,5 +4,6 @@
 
     <item android:title="New notebook"
         android:id="@+id/newNotebookItem"
+        android:icon="@drawable/ic_create_new_folder_black_24px"
         app:showAsAction="ifRoom"/>
 </menu>

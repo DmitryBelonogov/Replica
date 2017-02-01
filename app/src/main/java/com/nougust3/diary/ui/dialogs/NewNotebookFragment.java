@@ -44,9 +44,6 @@ public class NewNotebookFragment extends DialogFragment {
         nameEdit = (EditText) v.findViewById(R.id.nameView);
         descEdit = (EditText) v.findViewById(R.id.descriptionView);
 
-        nameEdit.setText("");
-        descEdit.setText("");
-
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,13 +90,20 @@ public class NewNotebookFragment extends DialogFragment {
         return false;
     }
 
+    private void clearViews() {
+        nameEdit.setText("");
+        descEdit.setText("");
+    }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
+        clearViews();
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
+        clearViews();
     }
 }

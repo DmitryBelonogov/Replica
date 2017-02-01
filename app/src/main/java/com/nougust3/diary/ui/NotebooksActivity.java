@@ -46,6 +46,8 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
         renameNotebookFragment = new RenameNotebookFragment();
         removeNotebookFragment = new RemoveNotebookFragment();
 
+        setNoteId(0);
+
         initNavigation();
         initList();
         loadNotebooks();
@@ -158,10 +160,21 @@ public class NotebooksActivity extends BaseActivity implements OnCompleteListene
     //}
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(listView != null) {
+            loadNotebooks();
+        }
+    }
+
+    @Override
     public void onComplete() {
         loadNotebooks();
     }
 
     @Override
     public void onRemoved() { }
+
+    @Override
+    public void onSelect(long id) { }
 }

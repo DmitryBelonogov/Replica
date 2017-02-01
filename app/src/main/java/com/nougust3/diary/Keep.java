@@ -27,11 +27,11 @@ public class Keep extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-       /* CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/MartaRegular.otf")
+       CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
-        );*/
+        );
 
         mercuryApi = retrofit.create(MercuryApi.class);
     }

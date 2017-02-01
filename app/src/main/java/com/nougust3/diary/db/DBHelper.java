@@ -171,8 +171,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    private List<Note> getNotes(String where) {
-        List<Note> noteList = new ArrayList<>();
+    private ArrayList<Note> getNotes(String where) {
+        ArrayList<Note> noteList = new ArrayList<>();
 
         String query = "SELECT " + KEY_CREATION + ","
                 + KEY_MODIFICATION + ","
@@ -253,7 +253,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return notebooksList;
     }
 
-    public List<Note> getAllNotes() {
+    public ArrayList<Note> getAllNotes() {
         return getNotes(" where task = 0 and archive = 0 ");
     }
 

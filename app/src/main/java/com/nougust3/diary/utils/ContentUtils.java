@@ -27,7 +27,29 @@ public class ContentUtils {
         text = input.substring(0, input.length() > 160 ? 160 : input.length());
         text = text.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
 
-        return text;
+        return cleanInvalidCharacters(text);
+    }
+
+    public static String cleanInvalidCharacters(String in) {
+        StringBuilder out = new StringBuilder();
+        char current;
+        if (in == null || ("".equals(in))) {
+            return "";
+        }
+        for (int i = 0; i < in.length(); i++) {
+            current = in.charAt(i);
+            if ((current == 0x9)
+                    || (current == 0xA)
+                    || (current == 0xD)
+                    || ((current >= 0x20) && (current <= 0xD7FF))
+                    || ((current >= 0xE000) && (current <= 0xFFFD))
+                    || ((current >= 0x10000) && (current <= 0x10FFFF))) {
+                out.append(current);
+            }
+
+        }
+        out.toString().replaceAll("[^\\\\uFFF0-\\\\uFFFC]", " ");
+        return out.toString().replaceAll("\\s", " ");
     }
 
 }

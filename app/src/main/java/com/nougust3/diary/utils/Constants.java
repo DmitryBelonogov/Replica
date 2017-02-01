@@ -10,4 +10,7 @@ public interface Constants {
 
     String notebook_name_default = "New notebook";
     String notebook_desc_default = "Notebook description";
+
+    String TABLE_NOTES = "notes";
+    String KEY_CREATION = "creation";
 }

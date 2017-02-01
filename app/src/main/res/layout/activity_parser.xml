@@ -1,32 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_parser"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nougust3.diary.ui.ParserActivity">
+    tools:context="com.nougust3.diary.ui.ParserActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleView"
+            android:textSize="16sp"
+            android:textColor="@color/primary_text_lighter" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dateView"
+                android:textColor="@color/primary_dark"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/notebookView"
+                android:textSize="12sp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/primary_dark"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contentView"
+            android:textSize="14sp"
+            android:maxLines="3"
+            android:lineSpacingExtra="3dp"
+            android:textColor="@color/secondary_text" />
+
+    </LinearLayout>
+
+
+    <com.fiberlink.maas360.android.richtexteditor.RichEditText
+        android:layout_width="match_parent"
+        android:layout_marginTop="80dp"
+        android:layout_height="match_parent"
+        android:id="@+id/content" />
 
     <Button
         android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="103dp"
-        android:layout_marginTop="73dp"
-        android:id="@+id/button" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="368dp"
+        android:id="@+id/saveBtn" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+    <com.fiberlink.maas360.android.richtexteditor.RichTextActions
+        android:id="@+id/rich_text_actions"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/button"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/textView" />
-</RelativeLayout>
+        android:gravity="bottom" />
+</LinearLayout>

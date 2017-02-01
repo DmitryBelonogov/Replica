@@ -2,12 +2,20 @@ package com.nougust3.diary.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.fiberlink.maas360.android.richtexteditor.RichEditText;
+import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
+import com.fiberlink.maas360.android.richtexteditor.RichWebView;
 import com.nougust3.diary.Keep;
 import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Content;
 import com.nougust3.diary.models.Note;
+import com.nougust3.diary.utils.ContentUtils;
+import com.nougust3.diary.utils.DateUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,15 +30,16 @@ public class ParserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parser);
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-             if ("text/plain".equals(type)) {
-                 parseHtml(intent.getStringExtra(Intent.EXTRA_TEXT));
-             }
-        }
+
+        Button saveBtn = (Button) findViewById(R.id.saveBtn);
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveNote();
+            }
+        });
     }
 
     private void parseHtml(String url) {
@@ -43,7 +52,8 @@ public class ParserActivity extends BaseActivity {
                 note.setTitle(content.getTitle());
                 note.setContent(content.getContent());
 
-                saveNote();
+                show(note);
+                //saveNote();
             }
             @Override
             public void onFailure(Call<Content> call, Throwable t) {
@@ -51,6 +61,26 @@ public class ParserActivity extends BaseActivity {
                 showToast("Fail");
             }
         });
+    }
+
+    private void show(Note note) {
+        TextView titleView = (TextView) findViewById(R.id.titleView);
+        TextView dateView = (TextView) findViewById(R.id.dateView);
+        TextView notebookView = (TextView) findViewById(R.id.notebookView);
+        TextView contentView = (TextView) findViewById(R.id.contentView);
+
+        RichEditText content = (RichEditText) findViewById(R.id.content);
+        content.removeChangeListener();
+
+        RichTextActions richTextActions = (RichTextActions) findViewById(R.id.rich_text_actions);
+        content.setRichTextActionsView(richTextActions);
+
+        titleView.setText(note.getTitle());
+        dateView.setText(DateUtils.format(note.getCreation()));
+        notebookView.setText("Inbox");
+        contentView.setText(ContentUtils.htmlToText(note.getContent()));
+
+        content.setHtml(note.getContent());
     }
 
     private void saveNote() {

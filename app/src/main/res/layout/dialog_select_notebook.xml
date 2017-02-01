@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:background="#f6f6f5"
+        android:id="@+id/notebooksList"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="5dp"
+        android:dividerHeight="0dp"
+        android:divider="@null" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="right">
+
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelBtn"
+            android:background="@color/background_white"/>
+
+        <Button
+            android:text="New"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/newBtn"
+            android:background="@color/background_white" />
+
+    </LinearLayout>
+
+</LinearLayout>

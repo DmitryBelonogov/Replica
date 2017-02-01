@@ -9,7 +9,15 @@ CREATE
         task INTEGER,
         done INTEGER,
         archive INTEGER,
-        notebook INTEGER
+        notebook INTEGER,
+        saved INTEGER
+    );
+
+CREATE
+    TABLE tags
+    (
+        id INTEGER PRIMARY KEY,
+        name TEXT
     );
 
 CREATE

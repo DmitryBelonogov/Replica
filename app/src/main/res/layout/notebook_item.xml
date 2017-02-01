@@ -26,7 +26,7 @@
             android:layout_marginStart="8dp"
             android:id="@+id/countView"
             android:textSize="16sp"
-            android:textColor="@color/primary_text_lighter"
+            android:textColor="@color/colorAccent"
             tools:ignore="MissingPrefix"/>
     </LinearLayout>
 

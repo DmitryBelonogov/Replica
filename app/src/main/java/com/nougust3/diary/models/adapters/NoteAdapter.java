@@ -2,6 +2,7 @@ package com.nougust3.diary.models.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,15 @@ public class NoteAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
 
+    private SparseBooleanArray selectedItemsId;
+
     private List<Note> notes = new ArrayList<>();
 
     public NoteAdapter(Activity activity, List<Note> notes) {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         this.notes = notes;
+        selectedItemsId = new SparseBooleanArray();
 
         for(Note note : this.notes) {
             note.setContent(ContentUtils.htmlToText(note.getContent()));
@@ -107,9 +111,35 @@ public class NoteAdapter extends BaseAdapter {
 
         return view;
     }
+    public void toggleSelection(int position) {
+        selectView(position, !selectedItemsId.get(position));
+    }
+
+    public void removeSelection() {
+        selectedItemsId = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return selectedItemsId.size();
+    }
+
+    public SparseBooleanArray getSelectedId() {
+        return selectedItemsId;
+    }
+
+    public void selectView(int position, boolean value) {
+        if(value) {
+            selectedItemsId.put(position, value);
+        }
+        else {
+            selectedItemsId.delete(position);
+            notifyDataSetChanged();
+        }
+    }
 
     @Override
-    public Object getItem(int position) {
+    public Note getItem(int position) {
         return notes.get(position);
     }
 

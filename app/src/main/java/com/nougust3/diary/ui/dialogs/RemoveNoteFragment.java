@@ -15,7 +15,6 @@ public class RemoveNoteFragment extends DialogFragment {
 
     private Note note;
 
-
     OnCompleteListener listener;
 
     @Override
