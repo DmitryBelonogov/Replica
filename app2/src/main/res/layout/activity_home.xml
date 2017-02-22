@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.nougust3.diary.ui.HomeActivity"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:ignore="MissingPrefix">
 
     <android.support.design.widget.CoordinatorLayout
@@ -67,8 +65,7 @@
                     android:src="@drawable/ic_done_black_24px"
                     android:id="@+id/editFastNoteDone"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:animateLayoutChanges="true" />
+                    android:focusableInTouchMode="true" />
 
             </LinearLayout>
 
@@ -100,9 +97,7 @@
                 android:layout_alignParentEnd="true"
                 android:background="#f6f6f5"
                 android:id="@+id/notesListView"
-                android:paddingLeft="16dp"
                 android:scrollbars="vertical"
-                android:paddingRight="16dp"
                 android:paddingBottom="5dp"
                 android:dividerHeight="0dp"
                 android:divider="@null"

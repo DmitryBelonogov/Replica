@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/app_bar_done_selection"
+        android:title="Cancel"
+        android:icon="@android:drawable/btn_dialog"
+        app:showAsAction="always|withText"
+        android:enabled="false"
+        android:checkable="false" />
+
+    <item
+        android:id="@+id/app_bar_move"
+        android:title="Set notebook"
+        android:icon="@drawable/ic_folder_multiple"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/app_bar_remove"
+        android:title="Remove"
+        android:icon="@drawable/ic_delete_white_24px"
+        app:showAsAction="collapseActionView" />
+</menu>

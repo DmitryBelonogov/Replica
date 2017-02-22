@@ -8,7 +8,10 @@ import java.util.ArrayList;
 public interface HomeView extends MvpView {
 
     void updateNotesList(ArrayList<Note> notesList);
+    void updateList(ArrayList<Note> notesList);
     void updateHeader(String text);
+
+    void showMessage(String msg);
 
     void startSelection();
     void selectItem(int position);
@@ -16,7 +19,5 @@ public interface HomeView extends MvpView {
 
     void openEditor();
     void closeEditor();
-
-    void updateCounter(int count);
 
 }

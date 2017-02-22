@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/actionInboxItem"
+            android:title="Inbox"
+            app:actionViewClass="android.widget.TextView"
+            android:icon="@drawable/ic_inbox_arrow_down" />
+
+    </group>
+
+    <item
+        android:id="@+id/actionNotebooksItem"
+        android:title="Notebooks"
+        android:icon="@drawable/ic_folder_multiple" />
+
+    <item
+        android:id="@+id/actionTrashItem"
+        android:title="Trash"
+        android:icon="@drawable/ic_delete_white_24px" />
+
+    <item
+        android:id="@+id/actionSettingsItem"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" />
+</menu>

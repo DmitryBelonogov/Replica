@@ -2,7 +2,9 @@ package com.nougust3.diary.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.MvpPresenter;
@@ -35,6 +38,7 @@ import com.nougust3.diary.Views.HomeView;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.adapters.NoteAdapter;
+import com.nougust3.diary.ui.dialogs.OnCompleteListener;
 import com.nougust3.diary.ui.dialogs.SelectNotebookFragment;
 import com.nougust3.diary.utils.ContentUtils;
 import com.nougust3.diary.utils.DateUtils;
@@ -44,19 +48,20 @@ import java.util.List;
 
 import Presenters.EditorPresenter;
 import Presenters.HomePresenter;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class HomeActivity extends MvpAppCompatActivity implements HomeView {
+public class HomeActivity extends MvpAppCompatActivity implements HomeView, OnCompleteListener {
 
     @InjectPresenter
     HomePresenter homePresenter;
 
     private EditText editFastNote;
     private ImageButton editFastNoteDone;
-    private DBHelper db;
     private NoteAdapter adapter;
     private List<Note> notesList;
     private TextView listHeader;
+    private Toolbar toolbar;
 
     private MenuItem doneSelection;
     private MenuItem moveItem;
@@ -72,16 +77,12 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
-    public enum MODE {
-        NORMAL_MODE, GROUP_EDIT, DONE_MODE
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("All notes");
         setSupportActionBar(toolbar);
 
@@ -132,17 +133,41 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
 
         initEditor();
         initNotesList();
-        initToolbar();
 
-
+        inboxCount.setText(DBHelper.getInstance().getInboxSize());
 
         homePresenter.onUpdateNotes();
+
+
     }
 
     @Override
     public void updateNotesList(ArrayList<Note> notesList) {
+        this.notesList = notesList;
         adapter = new NoteAdapter(HomeActivity.this, notesList);
         notesListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void updateList(ArrayList<Note> notesList) {
+        this.notesList = notesList;
+        adapter.setNotes(notesList);
+        adapter.notifyDataSetChanged();
+        //adapter = new NoteAdapter(HomeActivity.this, notesList);
+        //notesListView.setAdapter(adapter);
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        if(!SP.getBoolean("showFastEditor",false)) {
+            editFastNote.setVisibility(View.GONE);
+        }
+        else {
+            editFastNote.setVisibility(View.VISIBLE);
+        }
+        if(!SP.getBoolean("showListDate",false)) {
+            listHeader.setVisibility(View.GONE);
+        }
+        else {
+            listHeader.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -151,20 +176,46 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
     }
 
     @Override
+    public void showMessage(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void startSelection() {
         notesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         notesListView.setItemsCanFocus(false);
+        groupEdit = true;
+        invalidateOptionsMenu();
     }
 
     @Override
     public void selectItem(int position) {
         adapter.toggleSelection(position);
         notesListView.setItemChecked(position, true);
+        toolbar.setTitle(adapter.getSelectedCount() + "selected");
     }
 
     @Override
     public void doneSelection() {
+        groupEdit = false;
+        adapter.removeSelection();
+        notesListView.clearChoices();
 
+        toolbar.setTitle("All notes");
+
+        for (int i = 0; i < notesListView.getCount(); i++) {
+            notesListView.setItemChecked(i, false);
+        }
+
+        notesListView.post(new Runnable() {
+            @Override
+            public void run() {
+                notesListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+                notesListView.setItemsCanFocus(true);
+            }
+        });
+
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -177,17 +228,15 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
     @Override
     public void closeEditor() {
         editFastNote.setText("");
+        editFastNote.clearFocus();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        drawerLayout.requestFocus();
         editFastNoteDone.setVisibility(View.GONE);
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public void updateCounter(int count) {
-        inboxCount.setText(String.valueOf(count));
     }
 
 
@@ -222,31 +271,18 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.equals(removeItem)) {
-            SparseBooleanArray selected = adapter.getSelectedId();
-            for (int i = (selected.size() - 1); i >= 0; i--) {
-                if (selected.valueAt(i)) {
-                    Note note = adapter.getItem(selected.keyAt(i));
-                    DBHelper.getInstance().removeNote(note.getCreation());
-                }
-            }
-            getNotes();
-            groupEdit = false;
-            setMode(MODE.NORMAL_MODE);
+            homePresenter.onRemoveNotes(adapter.getSelectedId());
+            doneSelection();
         }
         if(item.equals(moveItem)) {
             SelectNotebookFragment selectNotebookFragment = new SelectNotebookFragment();
             selectNotebookFragment.show(getSupportFragmentManager(), "selectNotebookFragment");
         }
         if(item.equals(doneSelection)) {
-            groupEdit = false;
-            setMode(MODE.NORMAL_MODE);
+            doneSelection();
         }
 
         return true;
-    }
-
-    private void initToolbar() {
-        setMode(MODE.NORMAL_MODE);
     }
 
     private void initEditor() {
@@ -272,7 +308,7 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_BACK &&
                         editFastNote.getText().toString().equals("") ) {
-                    setMode(MODE.NORMAL_MODE);
+                    edit = false;
                 }
 
                 return false;
@@ -291,7 +327,6 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
     private void initNotesList() {
         notesListView = (ListView) findViewById(R.id.notesListView);
         notesListView.setNestedScrollingEnabled(true);
-        db = new DBHelper(getApplicationContext());
         notesList = new ArrayList<>();
         adapter = new NoteAdapter(HomeActivity.this, notesList);
         listHeader = (TextView)findViewById(R.id.listHeader);
@@ -304,10 +339,9 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(groupEdit) {
                     adapter.toggleSelection(position);
+                    toolbar.setTitle(adapter.getSelectedCount() + " selected");
                     return;
                 }
-
-                Log.i("KEEP", ContentUtils.htmlToText(notesList.get(position).getContent()));
                Intent intent = new Intent(HomeActivity.this, EditorActivity.class);
                intent.putExtra("creation5", notesList.get(position).getCreation());
                startActivityForResult(intent, 1);
@@ -331,83 +365,48 @@ public class HomeActivity extends MvpAppCompatActivity implements HomeView {
                 homePresenter.onScrollList(i);
             }
         });
-
-
-        getNotes();
-    }
-
-    private void setMode(MODE mode) {
-        if(mode == MODE.DONE_MODE) {
-            if(!groupEdit) {
-                edit = true;
-            }
-        }
-        if(mode == MODE.NORMAL_MODE) {
-            if(!groupEdit) {
-                adapter.removeSelection();
-                notesListView.clearChoices();
-                for (int i = 0; i < notesListView.getCount(); i++) {
-                    notesListView.setItemChecked(i, false);
-                }
-                notesListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notesListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
-                        notesListView.setItemsCanFocus(true);
-                    }
-                });
-
-                edit = false;
-            }
-        }
-        if(mode == MODE.GROUP_EDIT) {
-            groupEdit = true;
-            edit = false;
-        }
-
-        invalidateOptionsMenu();
-    }
-
-    private void getNotes() {
-        notesList = db.getAllNotes();
-        adapter = new NoteAdapter(HomeActivity.this, notesList);
-        notesListView.setAdapter(adapter);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if(notesListView != null) {
-            getNotes();
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(drawerLayout != null) {
+            drawerLayout.closeDrawers();
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == 1) getNotes();
+    public void onComplete() {
+
     }
 
-    /*@Override
+    @Override
+    public void onRemoved() {
+
+    }
+
+    @Override
     public void onSelect(long id) {
-        SparseBooleanArray selected = adapter.getSelectedId();
-        for (int i = (selected.size() - 1); i >= 0; i--) {
-            if (selected.valueAt(i)) {
-                Note note = adapter.getItem(selected.keyAt(i));
-                note.setNotebook(id);
-                DBHelper.getInstance().updateNote(note);
-            }
+        homePresenter.onMoveNotes(adapter.getSelectedId(), id);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(groupEdit) {
+            doneSelection();
+            return;
         }
-        getNotes();
-        groupEdit = false;
-        setMode(MODE.NORMAL_MODE);
-    }*/
+        super.onBackPressed();
+    }
 
-    //@Override
-   // public void onComplete() {
-    //    groupEdit = false;
-    //    setMode(MODE.NORMAL_MODE);
-   // }
-
-    //@Override
-    //public void onRemoved() { }
+    @Override
+    public void onResume() {
+        super.onResume();
+        homePresenter.onUpdateNotes();
+    }
 }
