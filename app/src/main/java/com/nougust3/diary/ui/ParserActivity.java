@@ -14,8 +14,8 @@ import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Content;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.utils.ContentUtils;
-import com.nougust3.diary.utils.DateUtils;
+import com.nougust3.diary.Utils.ContentUtils;
+import com.nougust3.diary.Utils.DateUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;

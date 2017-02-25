@@ -1,11 +1,11 @@
-package Presenters;
+package com.nougust3.diary.Presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.nougust3.diary.Views.HomeView;
+import com.nougust3.diary.View.HomeView;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
-import com.nougust3.diary.utils.DateUtils;
+import com.nougust3.diary.Utils.DateUtils;
 
 import java.util.ArrayList;
 
@@ -25,6 +25,7 @@ public class HomePresenter extends MvpPresenter<HomeView> {
     public void onUpdateNotes() {
         loadNotes();
         getViewState().updateNotesList(notesList);
+        getViewState().updateCounter(Integer.parseInt(DBHelper.getInstance().getInboxSize()));
     }
 
     public void onScrollList(int position) {

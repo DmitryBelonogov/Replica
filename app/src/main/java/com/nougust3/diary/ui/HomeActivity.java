@@ -30,20 +30,20 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.nougust3.diary.R;
-import com.nougust3.diary.Views.EditorView;
-import com.nougust3.diary.Views.HomeView;
+import com.nougust3.diary.View.EditorView;
+import com.nougust3.diary.View.HomeView;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.adapters.NoteAdapter;
 import com.nougust3.diary.ui.dialogs.SelectNotebookFragment;
-import com.nougust3.diary.utils.ContentUtils;
-import com.nougust3.diary.utils.DateUtils;
+import com.nougust3.diary.Utils.ContentUtils;
+import com.nougust3.diary.Utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Presenters.EditorPresenter;
-import Presenters.HomePresenter;
+import com.nougust3.diary.Presenter.EditorPresenter;
+import com.nougust3.diary.Presenter.HomePresenter;
 
 
 public class HomeActivity extends MvpAppCompatActivity implements HomeView {

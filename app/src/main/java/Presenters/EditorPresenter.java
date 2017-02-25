@@ -1,15 +1,15 @@
-package Presenters;
+package com.nougust3.diary.Presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import com.nougust3.diary.Keep;
-import com.nougust3.diary.Views.EditorView;
+import com.nougust3.diary.View.EditorView;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Content;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.Notebook;
-import com.nougust3.diary.utils.DateUtils;
+import com.nougust3.diary.Utils.DateUtils;
 
 import java.util.ArrayList;
 

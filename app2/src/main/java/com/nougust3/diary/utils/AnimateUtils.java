@@ -1,6 +1,5 @@
-package com.nougust3.diary.utils;
+package com.nougust3.diary.Utils;
 
-import android.view.MenuItem;
 import android.view.View;
 
 import com.daimajia.androidanimations.library.Techniques;

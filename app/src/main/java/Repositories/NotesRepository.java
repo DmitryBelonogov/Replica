@@ -1,4 +1,4 @@
-package Repositories;
+package com.nougust3.diary.Model.Repository;
 
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;

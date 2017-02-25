@@ -6,7 +6,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
 import com.nougust3.diary.models.Content;
-import com.nougust3.diary.utils.Constants;
+import com.nougust3.diary.Utils.Constants;
 
 public interface MercuryApi {
 

@@ -1,4 +1,4 @@
-package com.nougust3.diary.Views;
+package com.nougust3.diary.View;
 
 import com.arellomobile.mvp.MvpView;
 

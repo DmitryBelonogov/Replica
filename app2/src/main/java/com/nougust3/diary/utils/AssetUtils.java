@@ -1,4 +1,4 @@
-package com.nougust3.diary.utils;
+package com.nougust3.diary.Utils;
 
 import android.content.res.AssetManager;
 

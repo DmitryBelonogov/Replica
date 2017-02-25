@@ -13,7 +13,7 @@ import android.util.Log;
 import com.nougust3.diary.Keep;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.Notebook;
-import com.nougust3.diary.utils.Constants;
+import com.nougust3.diary.Utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -13,8 +13,8 @@ import com.nougust3.diary.R;
 import com.nougust3.diary.db.DBHelper;
 import com.nougust3.diary.models.Note;
 import com.nougust3.diary.models.holders.NoteHolder;
-import com.nougust3.diary.utils.ContentUtils;
-import com.nougust3.diary.utils.DateUtils;
+import com.nougust3.diary.Utils.ContentUtils;
+import com.nougust3.diary.Utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
 

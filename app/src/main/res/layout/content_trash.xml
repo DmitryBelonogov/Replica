@@ -4,7 +4,7 @@
     android:id="@+id/content_trash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nougust3.diary.ui.TrashActivity"
+    tools:context="com.nougust3.diary.View.Activity.TrashActivity"
     tools:showIn="@layout/activity_trash">
 
     <ListView

@@ -23,7 +23,7 @@ import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
 import com.fiberlink.maas360.android.richtexteditor.RichWebView;
 
 import com.nougust3.diary.R;
-import com.nougust3.diary.Views.EditorView;
+import com.nougust3.diary.View.EditorView;
 import com.nougust3.diary.ui.dialogs.NewNotebookFragment;
 import com.nougust3.diary.ui.dialogs.EditorDialogsListener;
 import com.nougust3.diary.ui.dialogs.RemoveNoteFragment;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import Presenters.EditorPresenter;
+import com.nougust3.diary.Presenter.EditorPresenter;
 
 public class EditorActivity extends MvpAppCompatActivity implements EditorView, EditorDialogsListener {
 

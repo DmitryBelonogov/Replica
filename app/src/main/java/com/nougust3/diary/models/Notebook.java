@@ -2,7 +2,7 @@ package com.nougust3.diary.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.nougust3.diary.utils.Constants;
+import com.nougust3.diary.Utils.Constants;
 import java.util.Date;
 
 public class Notebook implements Parcelable {

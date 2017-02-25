@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.EditorActivity"
+            android:name=".View.Activity.EditorActivity"
             android:windowSoftInputMode="stateHidden"
             android:hardwareAccelerated="true">
             <intent-filter>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".View.Activity.HomeActivity"
             android:label="Replica"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -38,20 +38,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.TrashActivity"
+            android:name=".View.Activity.TrashActivity"
             android:label="@string/title_activity_trash"
             android:theme="@style/AppTheme"
-            android:parentActivityName=".ui.HomeActivity"/>
+            android:parentActivityName=".View.Activity.HomeActivity"/>
         <activity
-            android:name=".ui.SearchActivity"
+            android:name=".View.Activity.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.ParserActivity" android:parentActivityName=".ui.HomeActivity"/>
-        <activity android:name=".ui.NotebooksActivity" android:parentActivityName=".ui.HomeActivity"/>
-        <activity android:name=".ui.NotesActivity" android:parentActivityName=".ui.NotebooksActivity"/>
-        <activity android:name=".ui.BaseActivity" />
+        <activity android:name=".View.Activity.ParserActivity" android:parentActivityName=".View.Activity.HomeActivity"/>
+        <activity android:name=".View.Activity.NotebooksActivity" android:parentActivityName=".View.Activity.HomeActivity"/>
+        <activity android:name=".View.Activity.NotesActivity" android:parentActivityName=".View.Activity.NotebooksActivity"/>
+        <activity android:name=".View.Activity.BaseActivity" />
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".View.Activity.SettingsActivity"
             android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/title_activity_settings"></activity>
     </application>
