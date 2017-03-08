@@ -5,9 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nougust3.diary.View.Activity.HomeActivity"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+    tools:context="com.nougust3.replica.View.Activity.HomeActivity"
     tools:ignore="MissingPrefix">
 
     <android.support.design.widget.CoordinatorLayout
@@ -32,8 +30,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editorView">
+                android:layout_height="wrap_content">
 
                 <EditText
                     app:layout_collapseMode="pin"
@@ -68,7 +65,7 @@
                     android:id="@+id/editFastNoteDone"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:animateLayoutChanges="true" />
+                    android:contentDescription="Done"/>
 
             </LinearLayout>
 
@@ -97,12 +94,9 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
                 android:background="#f6f6f5"
                 android:id="@+id/notesListView"
-                android:paddingLeft="16dp"
                 android:scrollbars="vertical"
-                android:paddingRight="16dp"
                 android:paddingBottom="5dp"
                 android:dividerHeight="0dp"
                 android:divider="@null"

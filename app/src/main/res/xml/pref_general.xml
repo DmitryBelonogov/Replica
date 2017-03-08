@@ -5,6 +5,21 @@
         android:key="showFastEditor"
         android:summary="@string/pref_description_social_recommendations"
         android:title="Show fast editor" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="showListDate"
+        android:summary="Показывает зату заметок в зоголоске списка"
+        android:title="Show list date" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="volumeScroll"
+        android:summary="Прокрутка с помощью клавиш громкости"
+        android:title="Scroll with volume keys" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="saveImages"
+        android:summary="Сохранять изображения, для доступа без интернета"
+        android:title="Save images" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->

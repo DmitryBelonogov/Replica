@@ -1,1 +1,1 @@
-include ':RichTextEditor', ':app2'
+include ':app', ':richtexteditor', ':thinprogressbar'

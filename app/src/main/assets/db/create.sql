@@ -10,7 +10,8 @@ CREATE
         done INTEGER,
         archive INTEGER,
         notebook INTEGER,
-        saved INTEGER
+        saved INTEGER,
+        scrollPosition INTEGER
     );
 
 CREATE

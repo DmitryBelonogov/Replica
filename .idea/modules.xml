@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Diary.iml" filepath="$PROJECT_DIR$/Diary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RichTextEditor/RichTextEditor.iml" filepath="$PROJECT_DIR$/RichTextEditor/RichTextEditor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app2/app2.iml" filepath="$PROJECT_DIR$/app2/app2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Replica.iml" filepath="$PROJECT_DIR$/Replica.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/richtexteditor/richtexteditor.iml" filepath="$PROJECT_DIR$/richtexteditor/richtexteditor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thinprogressbar/thinprogressbar.iml" filepath="$PROJECT_DIR$/thinprogressbar/thinprogressbar.iml" />
     </modules>
   </component>
 </project>

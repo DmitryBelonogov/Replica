@@ -2,13 +2,11 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/app_bar_done_selection"
-        android:title="Cancel"
-        android:icon="@android:drawable/btn_dialog"
-        app:showAsAction="always|withText"
-        android:enabled="false"
-        android:checkable="false" />
+    <item android:id="@+id/app_bar_done_selection"
+        android:title="DONE"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        />
 
     <item
         android:id="@+id/app_bar_move"

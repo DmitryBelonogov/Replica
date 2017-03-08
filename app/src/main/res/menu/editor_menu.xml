@@ -21,7 +21,6 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/app_bar_attach"
         android:title="Attach"
         android:icon="@drawable/ic_attach_file_white_24px"
         app:showAsAction="always"/>
