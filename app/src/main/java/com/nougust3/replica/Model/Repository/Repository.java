@@ -1,9 +1,9 @@
 package com.nougust3.replica.Model.Repository;
 
-public interface Repository<T> {
+interface Repository<T> {
 
-    void add(T item);
+    T get(long id);
+    void update(T item);
     void remove(T item);
-    void update(T note);
 
 }

@@ -6,8 +6,8 @@ import com.nougust3.replica.Model.Note;
 public class NotesRepository implements Repository<Note> {
 
     @Override
-    public void add(final Note note) {
-       DBHelper.getInstance().updateNote(note);
+    public Note get(long id) {
+        return DBHelper.getInstance().getNote(id);
     }
 
     @Override
