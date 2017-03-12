@@ -13,4 +13,8 @@ public interface Constants {
 
     String TABLE_NOTES = "notes";
     String KEY_CREATION = "creation";
+
+    String DIALOG_NOTEBOOK_NEW = "new";
+    String DIALOG_NOTEBOOK_RENAME = "rename";
+    String DIALOG_NOTEBOOK_REMOVE = "remove";
 }

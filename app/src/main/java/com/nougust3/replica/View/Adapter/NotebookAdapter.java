@@ -21,15 +21,13 @@ public class NotebookAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
 
-    private List<Notebook> notebooks = new ArrayList<>();
+    private ArrayList<Notebook> notebooks = new ArrayList<>();
 
     private SparseBooleanArray selectedItemsId;
 
     private Context context;
 
-    public NotebookAdapter(Activity activity, List<Notebook> notebooks) {
-
-        this.notebooks = notebooks;
+    public NotebookAdapter(Activity activity) {
         context = activity;
         selectedItemsId = new SparseBooleanArray();
 
@@ -110,6 +108,10 @@ public class NotebookAdapter extends BaseAdapter {
     @Override
     public Notebook getItem(int position) {
         return notebooks.get(position);
+    }
+
+    public void setNotebooks(ArrayList<Notebook> list) {
+        notebooks = list;
     }
 
 }

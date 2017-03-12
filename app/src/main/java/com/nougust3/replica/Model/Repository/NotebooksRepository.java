@@ -3,7 +3,13 @@ package com.nougust3.replica.Model.Repository;
 import com.nougust3.replica.Model.Database.DBHelper;
 import com.nougust3.replica.Model.Notebook;
 
+import java.util.ArrayList;
+
 public class NotebooksRepository implements Repository<Notebook> {
+
+    public ArrayList<Notebook> getAll() {
+        return new ArrayList<>(DBHelper.getInstance().getAllNotebooks());
+    }
 
     @Override
     public Notebook get(long id) {
