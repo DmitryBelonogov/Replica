@@ -18,6 +18,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
     private FloatingActionButton fab;
 
     private CoordinatorLayout coordinatorLayout;
+    private RelativeLayout editorLayout;
     private AppBarLayout appBarLayout;
     private CoordinatorLayout.LayoutParams params;
     private AppBarLayout.Behavior behavior;
@@ -77,6 +79,7 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
         setSupportActionBar(toolbar);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        editorLayout = (RelativeLayout) findViewById(R.id.editor_layout);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
 
         titleView = (EditText) findViewById(R.id.titleView);
@@ -145,9 +148,14 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
             params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
             behavior = (AppBarLayout.Behavior) params.getBehavior();
 
-            if (behavior != null) {
-                behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -10000, true);
-            }
+            //if (behavior != null) {
+            //    behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -10000, true);
+            //}
+
+            //if(getSupportActionBar() != null) {
+               //contentView.setPadding(0,appBarLayout.getHeight(),0,0);
+            //}
+            contentView.setY(110);
         }
     }
 
@@ -159,9 +167,11 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
             params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
             behavior = (AppBarLayout.Behavior) params.getBehavior();
 
-            if (behavior != null) {
-                behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, 10000, true);
-            }
+            //if (behavior != null) {
+            //    behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, 10000, true);
+            //}
+            //contentView.setPadding(0,0,0,0);
+            contentView.setY(0);
         }
     }
 
@@ -169,7 +179,6 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
     public void showFAB() {
         if(!fab.isShown()) {
             fab.show();
-            showHeader();
         }
     }
 
@@ -177,9 +186,6 @@ public class EditorActivity extends MvpAppCompatActivity implements EditorView, 
     public void hideFAB() {
         if(fab.isShown()) {
             fab.hide();
-            if(!isEdit) {
-                hideHeader();
-            }
         }
     }
 

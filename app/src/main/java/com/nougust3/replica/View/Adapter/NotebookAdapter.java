@@ -27,11 +27,11 @@ public class NotebookAdapter extends BaseAdapter {
 
     private Context context;
 
-    public NotebookAdapter(Activity activity) {
-        context = activity;
+    public NotebookAdapter(Context context) {
+        this.context = context;
         selectedItemsId = new SparseBooleanArray();
 
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 

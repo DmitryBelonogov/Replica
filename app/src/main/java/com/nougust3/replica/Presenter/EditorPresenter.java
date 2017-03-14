@@ -113,8 +113,15 @@ public class EditorPresenter extends MvpPresenter<EditorView> implements ImageLo
         if (scrollY > oldScrollY && scrollY > 50) {
             getViewState().hideFAB();
         }
-        if (scrollY < oldScrollY) {
+        else {
             getViewState().showFAB();
+        }
+
+        if(scrollY == 0) {
+            getViewState().showHeader();
+        }
+        else {
+            getViewState().hideHeader();
         }
     }
 

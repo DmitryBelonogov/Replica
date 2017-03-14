@@ -15,6 +15,7 @@ import com.nougust3.replica.Model.Notebook;
 import com.nougust3.replica.R;
 import com.nougust3.replica.View.Adapter.NotebookAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SelectNotebookFragment extends DialogFragment {
@@ -65,8 +66,10 @@ public class SelectNotebookFragment extends DialogFragment {
             }
         });
 
-        List<Notebook> notebooks = DBHelper.getInstance().getAllNotebooks();
-        final NotebookAdapter adapter = new NotebookAdapter(getActivity(), notebooks);
+        ArrayList<Notebook> notebooks = new ArrayList<>(DBHelper.getInstance().getAllNotebooks());
+        final NotebookAdapter adapter = new NotebookAdapter(getContext());
+
+        adapter.setNotebooks(notebooks);
 
         notebooksList.setAdapter(adapter);
 

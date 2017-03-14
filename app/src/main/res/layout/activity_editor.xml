@@ -24,13 +24,8 @@
            <android.support.design.widget.CollapsingToolbarLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               app:layout_scrollFlags="scroll|snap">
-
-
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical">
+               android:minHeight="56dp"
+               app:layout_scrollFlags="scroll|enterAlways|snap">
 
                    <android.support.v7.widget.Toolbar
                        android:id="@+id/toolbar"
@@ -41,41 +36,49 @@
                        app:layout_collapseMode="pin"
                        app:titleTextColor="#bcaaa4" />
 
-                   <EditText
-                       android:id="@+id/titleView"
-                       fontPath="fonts/RobotoSlab-Regular.ttf"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:background="@null"
-                       android:gravity="start|center_vertical"
-                       android:hint="Without name..."
-                       android:inputType="textMultiLine"
-                       android:padding="16dp"
-                       android:textColor="#eee"
-                       android:textColorHint="#acacaf"
-                       android:textSize="18sp"
-                       tools:ignore="MissingPrefix" />
-
-                   <Spinner
-                       android:id="@+id/spinner"
-                       android:layout_width="wrap_content"
-                       android:layout_height="35dp"
-                       android:background="@null"
-                       android:gravity="center_vertical"
-                       android:textSize="16sp" />
-
-
-               </LinearLayout>
-
-
            </android.support.design.widget.CollapsingToolbarLayout>
 
        </android.support.design.widget.AppBarLayout>
 
 
+
+       <LinearLayout
+           android:id="@+id/header_layout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <EditText
+               android:id="@+id/titleView"
+               fontPath="fonts/RobotoSlab-Regular.ttf"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@null"
+               android:gravity="start|center_vertical"
+               android:hint="Without name..."
+               android:inputType="textMultiLine"
+               android:paddingTop="12dp"
+               android:paddingStart="16dp"
+               android:paddingEnd="16dp"
+               android:textColor="#eee"
+               android:textColorHint="#acacaf"
+               android:textSize="17sp"
+               tools:ignore="MissingPrefix" />
+
+           <Spinner
+               android:id="@+id/spinner"
+               android:layout_width="wrap_content"
+               android:layout_height="36dp"
+               android:background="@null"
+               android:gravity="center_vertical"
+               android:textSize="16sp" />
+
            <RelativeLayout
+               android:id="@+id/editor_layout"
                android:layout_width="match_parent"
                android:layout_height="match_parent">
+
+
 
                <RelativeLayout
                    android:layout_width="match_parent"
@@ -101,7 +104,8 @@
                    android:layout_height="4dp"
                    android:layout_alignParentTop="true"/>
 
-               <android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+               <android.support.design.widget.FloatingActionButton
+                   xmlns:android="http://schemas.android.com/apk/res/android"
                    xmlns:app="http://schemas.android.com/apk/res-auto"
                    android:id="@+id/fab"
                    android:layout_width="wrap_content"
@@ -116,6 +120,7 @@
 
            </RelativeLayout>
 
+       </LinearLayout>
    </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>
